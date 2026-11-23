@@ -4,6 +4,7 @@ A joint-state Markov research platform for ETF portfolio allocation.
 Final project, B.Sc. Software Engineering, Shenkar College (2026–2027).
 
 **Team:** Baraa Haj, Seba Amasha, Aseel Abu Saleh
+
 **Supervisors:** Dr. Dvir Ross, Dr. Marcelo Sihman
 
 ## Repository structure
