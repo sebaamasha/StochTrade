@@ -10,7 +10,7 @@ Final project, B.Sc. Software Engineering, Shenkar College (2026–2027).
 
 | Folder | Contents |
 |---|---|
-| `docs/` | Project documents: SRS (v3.0) and, later, the SDD and reports |
+| `docs/` | Project documents: SRS and, later, the SDD and reports |
 | `prototype/` | `stochtrade_prototype.html` — interactive UI prototype |
 
 The application code (backend, frontend, tests) will be added after the SDD.
