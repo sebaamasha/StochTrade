@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StochTrade — SRS v3.0 screen prototype (synthetic data)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0EDE8;--s1:#F8F6F2;--s2:#E9E5DF;--s3:#DCD6CE;
+  --ink:#1A1612;--ink2:#4A4540;--ink3:#7D766F;
+  --line:rgba(26,22,18,.13);--line2:rgba(26,22,18,.24);
+  --pru:#1B3A6B;--pru2:#2A4F88;--pru-bg:rgba(27,58,107,.08);
+  --em:#0F7B5A;--em-bg:rgba(15,123,90,.1);
+  --amb:#A4500A;--amb-bg:rgba(180,83,9,.1);
+  --red:#9B1C1C;--red-bg:rgba(155,28,28,.08);
+  --rail:#1B3A6B;--rail-ink:rgba(255,255,255,.62);
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --r:5px;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101318;--s1:#171B22;--s2:#1D222B;--s3:#262C37;
+    --ink:#ECE8E2;--ink2:#A8A098;--ink3:#79726B;
+    --line:rgba(236,232,226,.11);--line2:rgba(236,232,226,.22);
+    --pru:#7DA6E8;--pru2:#9DBDF0;--pru-bg:rgba(125,166,232,.12);
+    --em:#3CC48A;--em-bg:rgba(60,196,138,.12);
+    --amb:#F2A33A;--amb-bg:rgba(242,163,58,.12);
+    --red:#F07070;--red-bg:rgba(240,112,112,.1);
+    --rail:#131A26;--rail-ink:rgba(236,232,226,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101318;--s1:#171B22;--s2:#1D222B;--s3:#262C37;
+  --ink:#ECE8E2;--ink2:#A8A098;--ink3:#79726B;
+  --line:rgba(236,232,226,.11);--line2:rgba(236,232,226,.22);
+  --pru:#7DA6E8;--pru2:#9DBDF0;--pru-bg:rgba(125,166,232,.12);
+  --em:#3CC48A;--em-bg:rgba(60,196,138,.12);
+  --amb:#F2A33A;--amb-bg:rgba(242,163,58,.12);
+  --red:#F07070;--red-bg:rgba(240,112,112,.1);
+  --rail:#131A26;--rail-ink:rgba(236,232,226,.6);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.45;overflow:hidden}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pru);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.shell{display:flex;height:100%}
+.rail{width:224px;flex-shrink:0;background:var(--rail);color:#fff;display:flex;flex-direction:column;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.mark{width:28px;height:28px;border-radius:4px;background:#fff;color:#1B3A6B;display:grid;place-items:center;font:600 11px var(--mono);flex-shrink:0}
+.brand b{font-size:15px;font-weight:600;letter-spacing:-.2px}
+.brand small{display:block;font:400 10px var(--mono);color:var(--rail-ink)}
+.navgrp{padding:10px 8px 2px}
+.navgrp h2{font-size:10px;font-weight:500;color:var(--rail-ink);padding:0 10px 4px;letter-spacing:.3px}
+.nb{position:relative;display:flex;align-items:center;gap:11px;width:100%;padding:8px 10px;border:0;border-radius:4px;background:none;color:var(--rail-ink);font-size:13px;text-align:left;cursor:pointer}
+.nb:hover{background:rgba(255,255,255,.07);color:#fff}
+.nb[aria-current="page"]{background:rgba(255,255,255,.14);color:#fff;font-weight:500}
+.nb svg{width:17px;height:17px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nb .lbl{white-space:nowrap}
+.nb .cnt{margin-left:auto;font:500 10px var(--mono);background:rgba(255,255,255,.16);border-radius:9px;padding:0 6px}
+.appendix{margin-top:6px;border-top:1px dashed rgba(255,255,255,.18)}
+.appendix h2 small{display:block;font-size:9.5px;opacity:.8;margin-top:1px}
+.me{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px}
+.av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:11px;font-weight:600;flex-shrink:0}
+.me .who{font-size:12px;line-height:1.25}
+.me .who small{display:block;color:var(--rail-ink);font-size:10.5px}
+.out{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer}
+.out:hover{background:rgba(255,255,255,.1)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--s1);min-height:54px}
+.top h1{font-size:16px;font-weight:600;letter-spacing:-.2px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1 span{font:400 11px var(--mono);color:var(--ink3);margin-left:8px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;border:1px solid var(--line2);border-radius:20px;padding:3px 10px;background:var(--s2);white-space:nowrap}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--amb)}
+.ws{font-size:11.5px;color:var(--ink3);white-space:nowrap}
+.view{flex:1;overflow-y:auto;padding:20px 22px 40px}
+.view[hidden]{display:none}
+
+/* 800–1023 px: icon rail with labels on hover and focus */
+@media (max-width:1023px) and (min-width:800px){
+  .rail{width:64px;overflow:visible}
+  .brand{justify-content:center;padding:14px 0}.brand .t{display:none}
+  .navgrp{padding:8px 6px 2px}.navgrp h2{display:none}
+  .nb{justify-content:center;padding:10px 0}
+  .nb .lbl{position:absolute;left:58px;top:50%;transform:translateY(-50%);background:var(--ink);color:var(--bg);font-size:12px;padding:4px 9px;border-radius:4px;opacity:0;pointer-events:none;z-index:20;transition:opacity .12s}
+  .nb:hover .lbl,.nb:focus-visible .lbl{opacity:1}
+  .nb .cnt{position:absolute;top:3px;right:6px;font-size:9px;padding:0 4px}
+  .me{flex-direction:column;padding:10px 4px;gap:6px}.me .who{display:none}.out{margin:0;font-size:10px;padding:2px 5px}
+}
+/* below 800 px: top bar navigation */
+@media (max-width:799px){
+  .shell{flex-direction:column}
+  .rail{width:100%;flex-direction:row;align-items:center;overflow-x:auto;overflow-y:hidden;flex-shrink:0}
+  .brand{border:0;padding:8px 10px}.brand .t{display:none}
+  .navgrp{display:flex;padding:4px 2px}.navgrp h2{display:none}
+  .nb{padding:8px 9px;gap:6px}.nb .lbl{font-size:12px}.nb .cnt{display:none}
+  .appendix{border:0;margin:0}
+  .me{margin:0;border:0;padding:6px 10px}.me .who{display:none}
+  .top{padding:8px 14px;flex-wrap:wrap}.ws{display:none}
+  .view{padding:14px}
+}
+
+/* ---------- content primitives ---------- */
+.grid{display:grid;gap:12px;margin-bottom:14px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.g12{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+@media (max-width:1100px){.g5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:900px){.g21,.g12,.g2{grid-template-columns:1fr}.g4,.g5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.g4,.g5{grid-template-columns:1fr}}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:14px;min-width:0}
+.card h3{font-size:12.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.card h3 small{font-weight:400;color:var(--ink3);font-size:11px}
+.kpi .k{font-size:11.5px;color:var(--ink2)}
+.kpi .v{font:600 22px/1.15 var(--mono);letter-spacing:-.6px;margin:5px 0 3px}
+.kpi .m{font-size:11px;color:var(--ink3)}
+.up{color:var(--em)}.dn{color:var(--red)}.wn{color:var(--amb)}
+.note{display:flex;gap:9px;align-items:flex-start;border-radius:var(--r);padding:9px 12px;font-size:12px;margin-bottom:14px;border:1px solid}
+.note.info{background:var(--pru-bg);border-color:rgba(27,58,107,.2);color:var(--ink)}
+.note.warn{background:var(--amb-bg);border-color:rgba(180,83,9,.25)}
+.note.ok{background:var(--em-bg);border-color:rgba(15,123,90,.25)}
+.note.err{background:var(--red-bg);border-color:rgba(155,28,28,.25)}
+.note b{font-weight:600}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:500;color:var(--ink3);padding:0 8px 7px 0;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.tk{font:600 12.5px var(--mono)}
+.tag{display:inline-block;font:500 10.5px var(--mono);padding:1px 6px;border-radius:3px;white-space:nowrap}
+.t-ok{background:var(--em-bg);color:var(--em)}.t-w{background:var(--amb-bg);color:var(--amb)}.t-x{background:var(--red-bg);color:var(--red)}.t-i{background:var(--pru-bg);color:var(--pru)}.t-n{background:var(--s2);color:var(--ink2)}
+.bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--em);border-radius:3px}
+.tabs{display:flex;gap:2px;background:var(--s2);border:1px solid var(--line);border-radius:6px;padding:3px;width:fit-content;margin-bottom:14px;flex-wrap:wrap}
+.tab{border:0;background:none;padding:6px 14px;border-radius:4px;font-size:12.5px;color:var(--ink2);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--s1);color:var(--pru);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:4px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--s1);padding:5px 10px;font-size:12px;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--pru);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#101318}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#101318}}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.btn{border:1px solid var(--line2);background:var(--s1);border-radius:4px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+.btn:hover{background:var(--s2)}
+.btn.pri{background:var(--pru);border-color:var(--pru);color:#fff}
+:root[data-theme="dark"] .btn.pri{color:#101318}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#101318}}
+.btn.pri:hover{opacity:.9}
+.btn.dng{color:var(--red);border-color:rgba(155,28,28,.35)}
+.lnk{background:none;border:0;color:var(--pru);cursor:pointer;font-size:12px;padding:0;text-decoration:underline;text-underline-offset:2px}
+.field{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;align-items:center;margin-bottom:9px}
+.field>label,.field>.fl{font-size:12px;color:var(--ink2)}
+@media (max-width:600px){.field{grid-template-columns:1fr;gap:4px}}
+.in{background:var(--s1);border:1px solid var(--line2);border-radius:4px;padding:5px 8px;font-size:12.5px;width:100%;max-width:240px}
+.in.num{max-width:120px}
+.in[aria-invalid="true"]{border-color:var(--red)}
+.grp{border-top:1px solid var(--line);padding-top:12px;margin-top:4px;margin-bottom:6px}
+.grp h4{font-size:11.5px;font-weight:600;color:var(--pru);margin-bottom:10px}
+.hint{font-size:11px;color:var(--ink3)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font:500 11.5px var(--mono);border:1px solid var(--line2);background:var(--s1);border-radius:4px;padding:3px 8px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pru-bg);border-color:var(--pru);color:var(--pru)}
+.vlist li{list-style:none;display:flex;gap:7px;font-size:12px;margin-bottom:5px;align-items:flex-start}
+.vlist li i{font-style:normal;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.vlist .ok i{background:var(--em-bg);color:var(--em)}.vlist .w i{background:var(--amb-bg);color:var(--amb)}.vlist .x i{background:var(--red-bg);color:var(--red)}
+.mono-box{font:12px/1.65 var(--mono);background:var(--s2);border-radius:4px;padding:10px 12px;color:var(--ink2)}
+.mono-box b{color:var(--ink);font-weight:600}
+.mx{display:grid;gap:3px;font-family:var(--mono);font-size:11.5px}
+.mx .c{padding:8px 4px;border-radius:3px;text-align:center;cursor:default;font-weight:500}
+.mx .h{color:var(--ink3);text-align:center;font-size:10.5px;padding:2px 0}
+.mx .rl{color:var(--ink2);text-align:right;padding-right:6px;font-size:10.5px;align-self:center}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:3px;border-radius:2px;display:inline-block}
+.stage{display:inline-block;font:500 11px var(--mono);padding:2px 7px;border-radius:3px;background:var(--s2);color:var(--ink3);margin:0 3px 4px 0}
+.stage.d{background:var(--em-bg);color:var(--em)}.stage.a{background:var(--pru-bg);color:var(--pru);font-weight:600}.stage.f{background:var(--red-bg);color:var(--red)}
+.job{margin-bottom:10px}
+.job .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.job .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink3);margin-top:4px}
+.login{display:grid;place-items:center;min-height:100%}
+.lcard{width:min(340px,100%);background:var(--s1);border:1px solid var(--line);border-radius:8px;padding:26px}
+.lcard h2{font-size:18px;font-weight:600;margin-bottom:2px}
+.lcard p{font-size:12px;color:var(--ink3);margin-bottom:18px}
+.lcard .in{max-width:none;padding:8px 10px}
+.lcard label{display:block;font-size:12px;color:var(--ink2);margin:0 0 4px}
+.lcard .f{margin-bottom:12px}
+.lcard .btn.pri{width:100%;padding:9px}
+.err-msg{font-size:11.5px;color:var(--red);margin-top:4px}
+svg text{font-family:var(--mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.wm{position:fixed;left:58%;top:56%;transform:translate(-50%,-50%) rotate(-22deg);font:700 52px var(--sans);color:rgba(155,28,28,.09);white-space:nowrap;pointer-events:none;z-index:40;letter-spacing:3px}
+.synbar{background:var(--red-bg);border-bottom:1px solid rgba(155,28,28,.25);color:var(--red);font-size:12px;font-weight:600;padding:6px 22px;text-align:center}
+@media print{.wm{color:rgba(155,28,28,.15)}}
+</style>
+
+</head>
+<body>
+<div class="wm" aria-hidden="true" id="wm">SYNTHETIC DATA — NOT RESULTS</div>
+<div class="shell">
+  <nav class="rail" aria-label="Main navigation">
+    <div class="brand"><div class="mark" aria-hidden="true">ST</div><div class="t"><b>StochTrade</b><small>SRS v3.0 prototype</small></div></div>
+    <div class="navgrp" id="nav-product"><h2>Workspace</h2></div>
+    <div class="navgrp appendix" id="nav-appendix"><h2>SRS review pages<small>Not product navigation</small></h2></div>
+    <div class="me"><div class="av" aria-hidden="true">BH</div><div class="who">Baraa Haj<small>Researcher workspace</small></div><button class="out" type="button" data-go="signin">Sign out</button></div>
+  </nav>
+  <div class="main">
+    <header class="top">
+      <h1 id="title">Overview</h1>
+      <span class="ws" id="ws">Run R-3012 · SPY + TLT · snapshot D-2025-12</span>
+      <span class="badge" title="All numbers in this prototype are synthetic"><i></i>Synthetic demo</span>
+    </header>
+    <div class="synbar" id="synbar">Synthetic numbers generated to illustrate layout and behaviour — they are not results and must not be cited.</div>
+
+    <!-- SC-01 -->
+    <section class="view" id="v-signin" hidden aria-label="Sign in">
+      <div class="login"><div class="lcard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div class="mark" style="background:var(--pru);color:#fff">ST</div><b style="font-size:16px">StochTrade</b></div>
+        <div id="signin-form">
+          <h2>Sign in</h2><p>Open your private research workspace.</p>
+          <div class="f"><label for="em">Email</label><input class="in" id="em" type="email" autocomplete="username" placeholder="name@shenkar.ac.il"></div>
+          <div class="f"><label for="pw">Password</label><input class="in" id="pw" type="password" autocomplete="current-password"><div class="err-msg" id="login-err" hidden role="alert">Email or password is incorrect.</div></div>
+          <button class="btn pri" type="button" id="do-login">Sign in</button>
+          <p style="margin:12px 0 0;text-align:center">No account? <button class="lnk" type="button" id="to-reg">Register</button></p>
+        </div>
+        <div id="reg-form" hidden>
+          <h2>Create account</h2><p>Registration creates an empty private workspace.</p>
+          <div class="f"><label for="rn">Display name</label><input class="in" id="rn"></div>
+          <div class="f"><label for="re">Email</label><input class="in" id="re" type="email"></div>
+          <div class="f"><label for="rp">Password</label><input class="in" id="rp" type="password"></div>
+          <div class="f"><label for="rp2">Confirm password</label><input class="in" id="rp2" type="password"><div class="err-msg" id="reg-err" hidden role="alert"></div></div>
+          <button class="btn pri" type="button" id="do-reg">Create account</button>
+          <p style="margin:12px 0 0;text-align:center">Have an account? <button class="lnk" type="button" id="to-login">Sign in</button></p>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- SC-02 -->
+    <section class="view" id="v-overview" aria-label="Overview">
+      <div class="note warn"><span><b>Simulated research output — not investment advice.</b> The latest decision of run R-3012 (development folds 2013–2019).</span></div>
+      <div class="grid g4" id="ov-kpis"></div>
+      <div class="grid g21">
+        <div class="card"><h3>Latest decision <small>context SPY low · TLT high · weights as % of portfolio equity</small></h3><div class="scroll"><table id="ov-w"></table></div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" type="button" data-go="optimize">Open in Optimization Explorer</button><button class="btn" type="button" data-go="backtest">Open Backtest Lab</button><button class="btn" type="button" data-go="builder">Create experiment</button></div></div>
+        <div class="card"><h3>Comparison with baselines <small>net Sharpe ratio, 95% block-bootstrap interval</small></h3><div class="scroll"><table id="ov-b"></table></div>
+          <p class="hint" style="margin-top:8px">An interval of the difference that includes 0 is not evidence of outperformance.</p></div>
+      </div>
+    </section>
+
+    <!-- SC-03 -->
+    <section class="view" id="v-builder" hidden aria-label="Strategy builder">
+      <div class="grid g21">
+        <div class="card">
+          <div class="grp" style="border:0;padding-top:0"><h4>Asset group and data</h4>
+            <div class="field"><span class="fl">Joint-state group (2–4)</span><div class="chips" id="sb-univ"></div></div>
+            <div class="field"><label for="sb-name">Experiment name</label><input class="in" id="sb-name" value="SPY-TLT daily joint state"></div>
+            <div class="field"><span class="fl">History</span><span class="num">2005-01-03 to 2025-12-31</span></div>
+          </div>
+          <div class="grp"><h4>State model</h4>
+            <div class="field"><span class="fl">Period P (sessions)</span><div class="seg" id="sb-P"></div></div>
+            <div class="field"><label for="sb-s">Categories per asset s</label><div><input type="range" id="sb-s" min="2" max="5" value="3" style="width:140px"> <span class="num" id="sb-sv">3</span></div></div>
+            <div class="field"><label for="sb-k">Markov order k</label><div><input type="range" id="sb-k" min="1" max="3" value="1" style="width:140px"> <span class="num" id="sb-kv">1</span></div></div>
+            <div class="field"><span class="fl">Boundaries</span><div class="seg" id="sb-bnd"></div></div>
+            <div class="field"><label for="sb-alpha">Smoothing α</label><input class="in num" id="sb-alpha" value="9"></div>
+            <div class="field"><span class="fl">Support n_min / n_floor</span><div style="display:flex;gap:6px"><input class="in num" id="sb-nmin" value="100" style="width:70px" aria-label="n_min"><input class="in num" id="sb-nfloor" value="30" style="width:70px" aria-label="n_floor"></div></div>
+            <div class="field"><label for="sb-tau">Shrinkage τ</label><input class="in num" id="sb-tau" value="100"></div>
+          </div>
+          <div class="grp"><h4>Allocation and execution</h4>
+            <div class="field"><span class="fl">Cap / gross target (%)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-cap" value="70" style="width:70px" aria-label="Cap"><input class="in num" id="sb-G" value="100" style="width:70px" aria-label="Gross target"></div></div>
+            <div class="field"><span class="fl">Fees / slippage (bps)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-fee" value="5" style="width:70px" aria-label="Fees"><input class="in num" id="sb-slip" value="5" style="width:70px" aria-label="Slippage"></div></div>
+            <div class="field"><label for="sb-band">No-trade band (points)</label><input class="in num" id="sb-band" value="2"></div>
+          </div>
+          <div class="grp"><h4>Evaluation</h4>
+            <div class="field"><span class="fl">Development / holdout</span><span class="num">2013–2019 / 2020–2025 (locked)</span></div>
+            <div class="field"><span class="fl">Bootstrap</span><span class="num">blocks of 21 periods · 2,000 resamples</span></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn" type="button" id="sb-save">Save draft</button><button class="btn pri" type="button" id="sb-run">Run on development folds</button><span class="hint" id="sb-msg" role="status" style="align-self:center"></span></div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:12px"><h3>Feasibility preview <small>FR-02, FR-07</small></h3><div class="mono-box" id="sb-feas"></div></div>
+          <div class="card"><h3>Validation</h3><ul class="vlist" id="sb-val"></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SC-04 -->
+    <section class="view" id="v-data" hidden aria-label="Data and runs">
+      <div class="tabs" role="tablist" id="dr-tabs"></div>
+      <div id="dr-ds"><div class="grid g2">
+        <div class="card"><h3>Snapshot <small>FR-03</small></h3><table id="dr-meta"></table></div>
+        <div class="card"><h3>Universe coverage <small>fixed rule: trading since 31 Dec 2004</small></h3><div class="scroll"><table id="dr-univ"></table></div></div>
+      </div></div>
+      <div id="dr-runs" hidden><div class="card"><h3>My runs <small>only runs you own are listed</small></h3><div class="scroll"><table id="dr-list"></table></div></div></div>
+    </section>
+
+    <!-- SC-05 -->
+    <section class="view" id="v-insights" hidden aria-label="Model insights">
+      <div class="tabs" role="tablist" id="mi-tabs"></div>
+      <div id="mi-trans">
+        <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="hint" for="mi-ctx">Context (last joint state)</label><select class="in" id="mi-ctx" style="max-width:220px"></select><span id="mi-ctxinfo"></span></div></div>
+        <div class="card"><h3>Next-state distribution <small>SPY + TLT · s = 3 · k = 1 · α = 9 · rows sum to 1</small></h3><div class="scroll"><table id="mi-table"></table></div>
+          <p class="hint" style="margin-top:8px">p(j | c) = (n_c,j + α·π_j) / (n_c + α). Wide intervals mean a probability should not be trusted on its own; that is why the moments are shrunk.</p></div>
+      </div>
+      <div id="mi-quality" hidden><div class="grid g2">
+        <div class="card"><h3>Support by context <small>training transitions per context, fold 7</small></h3><div id="mi-bars"></div></div>
+        <div class="card"><h3>Chain quality <small>FR-07</small></h3><table id="mi-q"></table></div>
+      </div></div>
+      <div id="mi-skill" hidden><div class="card"><h3>Forecast skill <small>multiclass Brier skill score with 95% interval · reference fitted on training data</small></h3><div class="scroll"><table id="mi-bss"></table></div>
+        <p class="hint" style="margin-top:8px">BSS = 1 − BS / BS_ref. Positive means better than the reference; an interval that includes 0 means no demonstrated skill.</p></div></div>
+    </section>
+
+    <!-- SC-06 -->
+    <section class="view" id="v-optimize" hidden aria-label="Optimization explorer">
+      <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <label class="hint" for="op-case">Decision</label><select class="in" id="op-case" style="max-width:300px"><option value="main">Context LH — worked example (SRS 3.5)</option><option value="cash">Second context — cash case (SRS Section 3.5)</option></select>
+        <label class="hint" for="op-cap">Cap %</label><input class="in num" id="op-cap" value="70" style="width:70px">
+        <label class="hint" for="op-tau">τ</label><input class="in num" id="op-tau" value="100" style="width:70px">
+      </div></div>
+      <div class="grid g2">
+        <div class="card"><h3>Conditional estimates <small>per session · % and %²</small></h3><div class="mono-box" id="op-est"></div></div>
+        <div class="card"><h3>Portfolio <small>FR-09</small></h3><div class="mono-box" id="op-port"></div><div class="scroll" style="margin-top:10px"><table id="op-w"></table></div></div>
+      </div>
+      <div class="note info"><span>The direction d is the mix of assets; the scale s is how much is invested. When a cap binds, s falls and the rest stays in cash while the mix is unchanged.</span></div>
+    </section>
+
+    <!-- SC-07 -->
+    <section class="view" id="v-backtest" hidden aria-label="Backtest lab">
+      <div class="card" style="margin-bottom:12px"><h3>Equity curves <small>development folds 2013–2019 · growth of $100,000 · synthetic</small></h3><div id="bt-eq"></div><div class="legend" id="bt-leg" style="margin-top:6px"></div></div>
+      <div class="grid g2">
+        <div class="card"><h3>Metrics with 95% intervals</h3><div class="scroll"><table id="bt-m"></table></div></div>
+        <div class="card"><h3>Hypotheses report <small>pre-registered, Table 5 of the SRS</small></h3><div class="scroll"><table id="bt-h"></table></div></div>
+      </div>
+      <div class="grid g2">
+        <div class="card"><h3>Folds <small>purged decisions shown</small></h3><div class="scroll"><table id="bt-f"></table></div></div>
+        <div class="card"><h3>Holdout 2020–2025 <small>FR-11</small></h3><div id="bt-hold"></div>
+          <h3 style="margin-top:12px">Assumptions</h3><div class="mono-box">Decision at close, fill at next unadjusted open · 5 bps fees + 5 bps slippage · band 2 points · benchmark SPY · simple open-to-open returns · r_f = 0 · annualization √252</div></div>
+      </div>
+    </section>
+
+    <!-- SC-08 -->
+    <section class="view" id="v-jobs" hidden aria-label="Job status">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn" type="button" id="jobs-refresh">Refresh status</button></div>
+      <div id="jobs"></div>
+    </section>
+
+    <!-- review pages -->
+    <section class="view" id="v-risks" hidden aria-label="Risk register"><div class="note warn"><span><b>SRS review page.</b> Reproduces Chapter 6; not part of the product.</span></div><div class="card"><h3>Risk register <small>R-01 to R-16</small></h3><div class="scroll"><table id="rk"></table></div></div></section>
+    <section class="view" id="v-nongoals" hidden aria-label="Non-goals"><div class="note warn"><span><b>SRS review page.</b> Reproduces Chapter 8; not part of the product.</span></div><div class="card"><h3>Non-goals</h3><table id="ng"></table></div></section>
+    <section class="view" id="v-issues" hidden aria-label="Open issues"><div class="note warn"><span><b>SRS review page.</b> Reproduces Chapter 9; not part of the product.</span></div><div class="card"><h3>Status of open issues</h3><div class="scroll"><table id="oi"></table></div></div></section>
+  </div>
+</div>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const el = (t, a = {}, h = '') => { const e = document.createElement(t); for (const k in a) e.setAttribute(k, a[k]); e.innerHTML = h; return e; };
+const f = (x, n = 4) => Number(x).toFixed(n);
+const pct = (x, n = 2) => (x * 100).toFixed(n) + '%';
+const money = x => (x < 0 ? '−' : '') + '$' + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+// ------------------------------------------------------------ model (same formulas and inputs as SRS Section 3.5)
+const J = ['LL','LM','LH','ML','MM','MH','HL','HM','HH'];
+const PI = [0.09,0.10,0.14,0.11,0.12,0.11,0.14,0.11,0.08];
+const RS = { L:-0.95, M:0.05, H:0.98 }, RT = { L:-0.62, M:0.01, H:0.63 };
+const R = J.map(j => [RS[j[0]], RT[j[1]]]);
+const COUNTS = {
+  LH: [34,40,62,44,50,48,62,46,34],                     // worked example (n_c = 420)
+  CASH: [70,50,30,60,50,30,50,45,35],                   // cash case (n_c = 420)
+};
+// synthetic counts for the other contexts of the transition table
+(function(){ const r = mulberry32(31); J.forEach(c => { if (c === 'LH') return; const tot = Math.round(460 + r() * 260); const w = PI.map(p => p * (0.75 + 0.5 * r())); const sw = w.reduce((a,b)=>a+b,0); const cnt = w.map(x => Math.floor(tot * x / sw)); cnt[4] += tot - cnt.reduce((a,b)=>a+b,0); COUNTS[c] = cnt; }); })();
+function probs(n, alpha = 9) { const nc = n.reduce((a,b)=>a+b,0); return n.map((x,i) => (x + alpha * PI[i]) / (nc + alpha)); }
+function moments(p) { const mu = [0,1].map(a => p.reduce((s,pi,j) => s + pi * R[j][a], 0)); const S = [[0,0],[0,0]]; p.forEach((pi,j) => { const d = [R[j][0]-mu[0], R[j][1]-mu[1]]; for (let a=0;a<2;a++) for (let b=0;b<2;b++) S[a][b] += pi * d[a] * d[b]; }); return { mu, S }; }
+function wilson(k, n) { if (!n) return [0, 1]; const z = 1.96, ph = k / n, den = 1 + z*z/n, c = (ph + z*z/(2*n)) / den, h = z * Math.sqrt(ph*(1-ph)/n + z*z/(4*n*n)) / den; return [Math.max(0, c - h), Math.min(1, c + h)]; }
+function optimize(n, cap = 0.70, tau = 100, G = 1, rf = 0) {
+  const nc = n.reduce((a,b)=>a+b,0), p = probs(n), mc = moments(p), m0 = moments(PI), lam = nc / (nc + tau);
+  const mu = [0,1].map(a => lam * mc.mu[a] + (1 - lam) * m0.mu[a]);
+  const S = [0,1].map(a => [0,1].map(b => lam * mc.S[a][b] + (1 - lam) * m0.S[a][b] + (a === b ? 1e-8 : 0)));
+  const e = mu.map(x => x - rf); let d = null, why = '';
+  if (Math.max(...e) > 0) {
+    const det = S[0][0]*S[1][1] - S[0][1]*S[1][0], t = [(S[1][1]*e[0] - S[0][1]*e[1]) / det, (-S[1][0]*e[0] + S[0][0]*e[1]) / det];
+    if (t[0] > 0 && t[1] > 0) { const s = t[0] + t[1]; d = [t[0]/s, t[1]/s]; }
+    else { const sr = [e[0] / Math.sqrt(S[0][0]), e[1] / Math.sqrt(S[1][1])]; d = sr[0] >= sr[1] ? [1,0] : [0,1]; }
+  }
+  let w = [0,0], s = 0;
+  if (d) { s = Math.min(G, cap / Math.max(...d)); w = d.map(x => s * x); why = s < G ? 'cap' : 'gross target'; }
+  const E = w[0]*mu[0] + w[1]*mu[1], sd = Math.sqrt(w[0]*w[0]*S[0][0] + 2*w[0]*w[1]*S[0][1] + w[1]*w[1]*S[1][1]);
+  return { nc, p, mc, m0, lam, mu, S, e, d, s, w, cash: 1 - w[0] - w[1], why, E, sd, sr: sd > 0 ? E / sd : null };
+}
+const SUPPORT = n => n >= 100 ? ['supported','t-ok'] : n >= 30 ? ['low support','t-w'] : ['unsupported: back-off','t-x'];
+
+// ------------------------------------------------------------ navigation (sandbox-safe)
+const VIEWS = [
+  {id:'overview', lbl:'Overview', sc:'SC-02', ic:'<path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/>'},
+  {id:'builder', lbl:'Strategy builder', sc:'SC-03', ic:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'},
+  {id:'data', lbl:'Data and runs', sc:'SC-04', ic:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>'},
+  {id:'insights', lbl:'Model insights', sc:'SC-05', ic:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>'},
+  {id:'optimize', lbl:'Optimization explorer', sc:'SC-06', ic:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>'},
+  {id:'backtest', lbl:'Backtest lab', sc:'SC-07', ic:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>'},
+  {id:'jobs', lbl:'Job status', sc:'SC-08', ic:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', cnt:true},
+];
+const APPX = [{id:'risks', lbl:'§6 Risk register', ic:'<path d="M12 3l9 16H3z"/><path d="M12 10v4"/>'},{id:'nongoals', lbl:'§8 Non-goals', ic:'<circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/>'},{id:'issues', lbl:'§9 Open issues', ic:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>'}];
+const TITLES = {signin:['Sign in','SC-01'], risks:['Risk register','§6 review page'], nongoals:['Non-goals','§8 review page'], issues:['Open issues','§9 review page']};
+VIEWS.forEach(v => TITLES[v.id] = [v.lbl, v.sc]);
+const NUMERIC = new Set(['overview','insights','optimize','backtest','data']);
+const navButton = v => el('button', {class:'nb', type:'button', 'data-go':v.id, 'aria-label':v.lbl}, `<svg viewBox="0 0 24 24" aria-hidden="true">${v.ic}</svg><span class="lbl">${v.lbl}</span>${v.cnt ? '<span class="cnt" id="jobcnt"></span>' : ''}`);
+VIEWS.forEach(v => $('#nav-product').appendChild(navButton(v))); APPX.forEach(v => $('#nav-appendix').appendChild(navButton(v)));
+let signedIn = true;
+function show(id) {
+  if (!TITLES[id]) id = 'overview'; if (!signedIn && id !== 'signin') id = 'signin';
+  document.querySelectorAll('.view').forEach(s => s.hidden = s.id !== 'v-' + id);
+  document.querySelectorAll('.nb').forEach(b => b.getAttribute('data-go') === id ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current'));
+  $('#title').innerHTML = `${TITLES[id][0]}<span>${TITLES[id][1]}</span>`;
+  $('.rail').style.display = id === 'signin' ? 'none' : '';
+  $('#wm').style.display = NUMERIC.has(id) ? '' : 'none'; $('#synbar').style.display = NUMERIC.has(id) ? '' : 'none';
+  try { if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id); } catch (err) { /* sandboxed preview */ }
+  if (id === 'backtest') drawBacktest();
+}
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (!g) return; const id = g.getAttribute('data-go'); if (id === 'signin') signedIn = false; show(id); });
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+function seg(container, opts, cur, on) { const c = $(container); c.innerHTML = ''; opts.forEach(o => { const b = el('button', {type:'button', 'aria-pressed':String(o.k === cur)}, o.l); b.onclick = () => { [...c.children].forEach(x => x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); on(o.k); }; c.appendChild(b); }); }
+function tabs(container, list, cur, on) { const c = $(container); c.innerHTML = ''; list.forEach(t => { const b = el('button', {class:'tab', role:'tab', type:'button', 'aria-selected':String(t.k === cur)}, t.l); b.onclick = () => { tabs(container, list, t.k, on); on(t.k); }; c.appendChild(b); }); }
+function kpi(k, v, m, cls = '') { return `<div class="card kpi"><div class="k">${k}</div><div class="v ${cls}">${v}</div><div class="m">${m}</div></div>`; }
+
+// ------------------------------------------------------------ SC-01
+$('#to-reg').onclick = () => { $('#signin-form').hidden = true; $('#reg-form').hidden = false; };
+$('#to-login').onclick = () => { $('#reg-form').hidden = true; $('#signin-form').hidden = false; };
+$('#do-login').onclick = () => { const ok = $('#em').value.includes('@') && $('#pw').value.length >= 8; $('#login-err').hidden = ok; if (ok) { signedIn = true; $('#pw').value = ''; show('overview'); } };
+$('#do-reg').onclick = () => { const m = $('#reg-err'); let msg = ''; if (!$('#rn').value.trim()) msg = 'Enter a display name.'; else if (!$('#re').value.includes('@')) msg = 'Enter a valid email address.'; else if ($('#rp').value.length < 8) msg = 'Use at least 8 characters.'; else if ($('#rp').value !== $('#rp2').value) msg = 'The passwords do not match.'; m.textContent = msg; m.hidden = !msg; if (!msg) { $('#reg-form').hidden = true; $('#signin-form').hidden = false; } };
+
+// ------------------------------------------------------------ SC-02
+const MAIN = optimize(COUNTS.LH);
+function drawOverview() {
+  const sp = SUPPORT(MAIN.nc);
+  $('#ov-kpis').innerHTML = kpi('Current context', 'SPY low · TLT high', `n_c = ${MAIN.nc} · <span class="tag ${sp[1]}">${sp[0]}</span>`) +
+    kpi('Expected excess return', f(MAIN.E, 4) + '%', 'per session, before costs') + kpi('Expected volatility', f(MAIN.sd, 3) + '%', 'per session') + kpi('Cash', pct(MAIN.cash, 1), 'no cap binding');
+  $('#ov-w').innerHTML = '<thead><tr><th>ETF</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th><th class="r">Expected excess return</th></tr></thead><tbody>' +
+    ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(MAIN.w[i])}</td><td class="r num">${money(100000*MAIN.w[i])}</td><td class="r num">${f(MAIN.mu[i],5)}%</td></tr>`).join('') +
+    `<tr><td class="tk">Cash</td><td class="r num">${pct(MAIN.cash)}</td><td class="r num">${money(100000*MAIN.cash)}</td><td class="r num">0</td></tr></tbody>`;
+  const OB = [['st','Strategy (joint state)'],['b1','B1 buy-and-hold SPY'],['b2','B2 equal weight 1/N'],['b3','B3 same optimizer, no states']];
+  $('#ov-b').innerHTML = '<thead><tr><th>Strategy</th><th class="r">Sharpe [95%]</th><th class="r">Strategy minus baseline [95%]</th></tr></thead><tbody>' +
+    OB.map(([k, nm]) => { const x = stats(BT.ret[k]), d = k === 'st' ? null : dsr('st', k); return `<tr><td>${nm}</td><td class="r num">${f(x.sr,2)} [${f(x.lo,2).replace('-','−')}, ${f(x.hi,2)}]</td><td class="r num">${d ? `${sgn(d.d)} ${iv(d.lo,d.hi)}` : '—'}</td></tr>`; }).join('') + '</tbody>';
+}
+
+// ------------------------------------------------------------ SC-03
+const UNIV = ['SPY','QQQ','IWM','DIA','EFA','EEM','TLT','IEF','GLD','VNQ','XLK','XLF','XLE','XLV','XLU'];
+const SB = { group: new Set(['SPY','TLT']), P: 1, bnd: 'q' };
+UNIV.forEach(t => { const b = el('button', {class:'chip', type:'button', 'aria-pressed':String(SB.group.has(t))}, t); b.onclick = () => { SB.group.has(t) ? SB.group.delete(t) : SB.group.add(t); b.setAttribute('aria-pressed', String(SB.group.has(t))); validate(); }; $('#sb-univ').appendChild(b); });
+seg('#sb-P', [{k:1,l:'1'},{k:5,l:'5'},{k:21,l:'21'}], 1, k => { SB.P = k; validate(); });
+seg('#sb-bnd', [{k:'q',l:'Training quantiles'},{k:'f',l:'Fixed thresholds'}], 'q', k => { SB.bnd = k; validate(); });
+['sb-s','sb-k'].forEach(id => $('#'+id).addEventListener('input', () => { $('#'+id+'v').textContent = $('#'+id).value; validate(); }));
+['sb-name','sb-alpha','sb-nmin','sb-nfloor','sb-tau','sb-cap','sb-G','sb-fee','sb-slip','sb-band'].forEach(id => $('#'+id).addEventListener('input', validate));
+function poissonBelow(k, lam) { let s = 0, t = Math.exp(-lam); for (let i = 0; i < k; i++) { s += t; t *= lam / (i + 1); } return Math.min(1, s); }
+let sbOK = false;
+function validate() {
+  const m = SB.group.size, s = +$('#sb-s').value, k = +$('#sb-k').value, nmin = +$('#sb-nmin').value, nfl = +$('#sb-nfloor').value;
+  const sess = Math.round(5290 / SB.P), ctx = Math.pow(s, m * k), nxt = Math.pow(s, m), per = sess / ctx, cell = per / nxt, below = poissonBelow(nmin, per);
+  $('#sb-feas').innerHTML = `group m = <b>${m}</b> · s = <b>${s}</b> · k = <b>${k}</b> · P = <b>${SB.P}</b><br>contexts s<sup>m·k</sup> = <b>${ctx.toLocaleString()}</b> · next states s<sup>m</sup> = <b>${nxt}</b><br>periods in history ≈ <b>${sess.toLocaleString()}</b><br>observations per context ≈ <b>${per.toFixed(1)}</b> · per transition cell ≈ <b>${cell.toFixed(2)}</b><br>contexts expected below n_min (uniform approx.) ≈ <b>${pct(below, 0)}</b>` +
+    (per < nmin ? `<br><span class="dn">Warning: expected support is below n_min = ${nmin}. Reduce m, s, k, or P before running.</span>` : `<br><span class="up">Expected support is above n_min.</span>`);
+  const items = []; const add = (c, t) => items.push([c, t]);
+  m >= 2 && m <= 4 ? add('ok', `${m} assets in the joint state`) : add('x', 'Select 2 to 4 assets for the joint state');
+  ctx <= 729 ? add('ok', `${ctx} contexts (limit 729)`) : add('x', `${ctx.toLocaleString()} contexts exceed the limit of 729 (NFR-08)`);
+  nfl > 0 && nfl < nmin ? add('ok', 'Support thresholds valid') : add('x', 'n_floor must be positive and below n_min');
+  const cap = +$('#sb-cap').value, G = +$('#sb-G').value;
+  G > 0 && G <= 100 ? add('ok', `Gross target ${G}% ≤ 100%`) : add('x', `Gross target ${G}% rejected: Long-only cannot exceed 100%`);
+  cap > 0 && cap <= 100 ? (cap * m < G ? add('w', `Caps allow at most ${Math.min(100, cap * m)}% invested; the rest stays in cash`) : add('ok', `Cap ${cap}%`)) : add('x', 'Cap must be between 1% and 100%');
+  +$('#sb-alpha').value > 0 ? 0 : add('x', 'α must be positive');
+  if (SB.bnd === 'f') add('w', 'Fixed thresholds leave tail categories sparse; quantiles are recommended');
+  if (per < nmin) add('w', 'Expected support below n_min (see preview)');
+  sbOK = !items.some(i => i[0] === 'x');
+  $('#sb-val').innerHTML = items.map(([c,t]) => `<li class="${c}"><i>${c === 'ok' ? '✓' : c === 'w' ? '!' : '✕'}</i><span>${t}</span></li>`).join('');
+}
+$('#sb-save').onclick = () => { $('#sb-msg').textContent = 'Draft saved. No run was created.'; };
+$('#sb-run').onclick = () => { validate(); if (!sbOK) { $('#sb-msg').textContent = 'Fix the errors marked ✕. No run was created.'; return; } JOBS.unshift({ id:'R-' + (3015 + JOBS.filter(j => j.created).length), name:$('#sb-name').value.trim(), st:'queued', stage:-1, sub:'just now', upd:'just now', created:true }); drawJobs(); show('jobs'); };
+
+// ------------------------------------------------------------ SC-04
+let drTab = 'ds';
+tabs('#dr-tabs', [{k:'ds',l:'Dataset inspector'},{k:'runs',l:'Run list'}], 'ds', k => { $('#dr-ds').hidden = k !== 'ds'; $('#dr-runs').hidden = k !== 'runs'; });
+const kv = rows => '<tbody>' + rows.map(([k,v]) => `<tr><td class="hint" style="width:42%">${k}</td><td>${v}</td></tr>`).join('') + '</tbody>';
+$('#dr-meta').innerHTML = kv([['Snapshot', '<span class="num">D-2025-12</span>'], ['Provider', 'yfinance (synthetic in this prototype)'], ['Coverage', '<span class="num">2005-01-03 to 2025-12-31 · 5,290 sessions</span>'], ['Prices', 'adjusted for returns, unadjusted for execution'], ['Calendar', 'NYSE (exchange_calendars)'], ['Quality', '0 duplicates · 0 non-positive prices · 0 missing sessions <span class="tag t-ok">FR-04</span>'], ['Effective start for SPY + TLT', '<span class="num">2005-01-03</span>']]);
+const FIRST = { SPY:'1993-01-29', QQQ:'1999-03-10', IWM:'2000-05-26', DIA:'1998-01-20', EFA:'2001-08-17', EEM:'2003-04-14', TLT:'2002-07-30', IEF:'2002-07-30', GLD:'2004-11-18', VNQ:'2004-09-29', XLK:'1998-12-22', XLF:'1998-12-22', XLE:'1998-12-22', XLV:'1998-12-22', XLU:'1998-12-22' };
+$('#dr-univ').innerHTML = '<thead><tr><th>ETF</th><th>Class</th><th>First trading date</th></tr></thead><tbody>' + UNIV.map(t => `<tr><td class="tk">${t}</td><td class="hint">${['TLT','IEF'].includes(t) ? 'Bonds' : t === 'GLD' ? 'Gold' : 'Equity'}</td><td class="num">${FIRST[t]}</td></tr>`).join('') + '</tbody>';
+const st = s => ({done:'<span class="tag t-ok">Completed</span>', failed:'<span class="tag t-x">Failed</span>', cancelled:'<span class="tag t-n">Cancelled</span>', running:'<span class="tag t-i">Running</span>', queued:'<span class="tag t-w">Queued</span>'})[s];
+const RUNS = [['R-3014','SPY-GLD daily','running','Development','—'],['R-3012','SPY-TLT daily joint state','done','Development','—'],['R-3011','SPY-TLT, k = 2','done','Development','—'],['R-3009','SPY-TLT-GLD, k = 1','failed','Development','—'],['R-3004','SPY-TLT weekly','done','Development','—']];
+$('#dr-list').innerHTML = '<thead><tr><th>Run</th><th>Experiment</th><th>Configuration</th><th>Use</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + RUNS.map(r => `<tr><td class="num">${r[0]}</td><td>${r[1]}</td><td class="num hint">cfg-${r[0].slice(2)}a</td><td>${r[3]}</td><td>${st(r[2])}</td><td>${r[2] === 'done' ? '<button class="lnk" data-go="overview">Open</button> · <button class="lnk" data-go="builder">Clone</button>' : r[2] === 'failed' ? '<button class="lnk" data-go="jobs">Failure reason</button>' : '<button class="lnk" data-go="jobs">Status</button>'}</td></tr>`).join('') + '</tbody>';
+
+// ------------------------------------------------------------ SC-05
+tabs('#mi-tabs', [{k:'t',l:'Transition table'},{k:'q',l:'Chain quality'},{k:'s',l:'Forecast skill'}], 't', k => { $('#mi-trans').hidden = k !== 't'; $('#mi-quality').hidden = k !== 'q'; $('#mi-skill').hidden = k !== 's'; });
+const NAME = { L:'low', M:'middle', H:'high' };
+J.forEach(c => { const o = el('option', { value:c }, `${c} — SPY ${NAME[c[0]]} · TLT ${NAME[c[1]]}`); if (c === 'LH') o.selected = true; $('#mi-ctx').appendChild(o); });
+function drawTrans() {
+  const c = $('#mi-ctx').value, n = COUNTS[c], nc = n.reduce((a,b)=>a+b,0), p = probs(n), sp = SUPPORT(nc);
+  $('#mi-ctxinfo').innerHTML = `n_c = <b class="num">${nc}</b> <span class="tag ${sp[1]}">${sp[0]}</span>`;
+  $('#mi-table').innerHTML = '<thead><tr><th>Next state j</th><th class="r">Count n_c,j</th><th class="r">π_j</th><th class="r">p(j | c)</th><th class="r">95% interval</th><th class="r">r_j SPY</th><th class="r">r_j TLT</th></tr></thead><tbody>' +
+    J.map((j,i) => { const ci = wilson(n[i], nc); return `<tr><td class="tk">${j}</td><td class="r num">${n[i]}</td><td class="r num">${f(PI[i],2)}</td><td class="r num">${f(p[i])}</td><td class="r num">[${f(ci[0],3)}, ${f(ci[1],3)}]</td><td class="r num">${R[i][0] >= 0 ? '+' : ''}${f(R[i][0],2)}%</td><td class="r num">${R[i][1] >= 0 ? '+' : ''}${f(R[i][1],2)}%</td></tr>`; }).join('') +
+    `<tr><td><b>Total</b></td><td class="r num"><b>${nc}</b></td><td class="r num">1.00</td><td class="r num"><b>${f(p.reduce((a,b)=>a+b,0))}</b></td><td></td><td></td><td></td></tr></tbody>`;
+}
+$('#mi-ctx').onchange = drawTrans;
+function drawQuality() {
+  const ns = J.map(c => COUNTS[c].reduce((a,b)=>a+b,0)), mx = Math.max(...ns), sorted = [...ns].sort((a,b)=>a-b);
+  const W = 420, H = 190, bw = W / J.length - 8;
+  let g = `<line x1="0" x2="${W}" y1="${H - 20 - (100/mx)*(H-40)}" y2="${H - 20 - (100/mx)*(H-40)}" stroke="${css('--amb')}" stroke-dasharray="4 3"/><text x="${W-4}" y="${H - 24 - (100/mx)*(H-40)}" font-size="10" text-anchor="end" fill="${css('--amb')}">n_min = 100</text>`;
+  ns.forEach((n,i) => { const h = (n/mx)*(H-40), x = i*(bw+8)+4; g += `<rect x="${x}" y="${H-20-h}" width="${bw}" height="${h}" rx="2" fill="${J[i]==='LH' ? css('--pru') : css('--em')}"/><text x="${x+bw/2}" y="${H-6}" font-size="10" text-anchor="middle" fill="${css('--ink2')}">${J[i]}</text><text x="${x+bw/2}" y="${H-24-h}" font-size="9.5" text-anchor="middle" fill="${css('--ink2')}">${n}</text>`; });
+  $('#mi-bars').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Support by context">${g}</svg>`;
+  $('#mi-q').innerHTML = kv([['Contexts', '9 (m = 2, s = 3, k = 1)'], ['Minimum support', `<span class="num">${sorted[0]}</span>`], ['10th percentile', `<span class="num">${sorted[0]}</span>`], ['Median support', `<span class="num">${sorted[4]}</span>`], ['Contexts below n_min', '0 of 9'], ['Decisions in low-support contexts', '0.0%'], ['Decisions in unsupported contexts (back-off)', '0.0% · 0 back-off events'], ['Homogeneity across folds (χ², Should)', 'not rejected at 5%']]);
+}
+$('#mi-bss').innerHTML = '<thead><tr><th>Period</th><th class="r">BSS vs order-0</th><th class="r">95% interval</th><th class="r">BSS vs persistence</th><th>H1</th></tr></thead><tbody>' +
+  [['Fold 1 · 2013', 0.006, -0.004, 0.016, 0.071], ['Fold 3 · 2015', -0.002, -0.013, 0.009, 0.064], ['Fold 5 · 2017', 0.004, -0.006, 0.014, 0.069], ['Fold 7 · 2019', 0.003, -0.008, 0.013, 0.066], ['All development folds', 0.004, -0.002, 0.010, 0.068]]
+  .map(r => `<tr><td>${r[0]}</td><td class="r num">${r[1] >= 0 ? '+' : ''}${f(r[1],3)}</td><td class="r num">[${f(r[2],3)}, ${f(r[3],3)}]</td><td class="r num">+${f(r[4],3)}</td><td>${r[2] > 0 ? '<span class="tag t-ok">skill</span>' : '<span class="tag t-n">no demonstrated skill</span>'}</td></tr>`).join('') + '</tbody>';
+
+// ------------------------------------------------------------ SC-06
+function drawOpt() {
+  const cs = $('#op-case').value === 'main' ? COUNTS.LH : COUNTS.CASH, cap = Math.min(100, Math.max(1, +$('#op-cap').value || 70)) / 100, tau = Math.max(0, +$('#op-tau').value || 0);
+  const o = optimize(cs, cap, tau), M2 = m => `[ ${f(m[0][0],5)}  ${f(m[0][1],5)} ; ${f(m[1][0],5)}  ${f(m[1][1],5)} ]`;
+  $('#op-est').innerHTML = `n_c = <b>${o.nc}</b> · λ_c = n_c / (n_c + τ) = <b>${f(o.lam)}</b><br>μ_c (conditional) = (${f(o.mc.mu[0],5)}, ${f(o.mc.mu[1],5)})<br>μ̄ (order 0) = (${f(o.m0.mu[0],5)}, ${f(o.m0.mu[1],5)})<br>e_c = μ̃_c − r_f = <b>(${f(o.e[0],5)}, ${f(o.e[1],5)})</b><br>Σ̃_c = <b>${M2(o.S)}</b>`;
+  $('#op-port').innerHTML = o.d ? `direction d = <b>(${f(o.d[0])}, ${f(o.d[1])})</b><br>scale s = min(G, cap / max d) = <b>${f(o.s)}</b> · set by the <b>${o.why}</b><br>expected return ${f(o.E,4)}% · volatility ${f(o.sd,4)}% per session<br>Sharpe ${f(o.sr,4)} per session · ${f(o.sr*Math.sqrt(252),2)} annualized (display only)` : `No asset has a positive expected excess return.<br><b>Allocation: 100% cash.</b>`;
+  $('#op-w').innerHTML = '<thead><tr><th>Asset</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th></tr></thead><tbody>' + ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(o.w[i])}</td><td class="r num">${money(100000*o.w[i])}</td></tr>`).join('') + `<tr><td class="tk">Cash</td><td class="r num">${pct(o.cash)}</td><td class="r num">${money(100000*o.cash)}</td></tr></tbody>`;
+}
+['op-case','op-cap','op-tau'].forEach(id => $('#'+id).addEventListener('input', drawOpt));
+
+// ------------------------------------------------------------ SC-07 (synthetic series)
+const BT = (() => { const r = mulberry32(84), n = 1762, s = { st:[], b1:[], b2:[], b3:[], b4:[], b5:[] };
+  for (let i = 0; i < n; i++) { const m = gauss(r)*0.0098 + 0.00036, b = gauss(r)*0.0082 + 0.00012, c = gauss(r)*0.0030;
+    s.b1.push(m); s.b2.push(0.5*m + 0.5*b); s.b3.push(0.55*m + 0.45*b + 0.4*c); s.st.push(0.54*m + 0.46*b + 0.6*c + 0.00002); s.b4.push(0.56*m + 0.44*b + 0.7*c); s.b5.push(0.53*m + 0.47*b + 0.65*c - 0.00001); }
+  const eq = a => { let v = 100000; return a.map(x => v *= (1 + x)); }; const E = { ret: s }; for (const k in s) E[k] = eq(s[k]); return E; })();
+function stats(a) { const n = a.length, m = a.reduce((p,q)=>p+q,0)/n, sd = Math.sqrt(a.reduce((p,q)=>p+(q-m)**2,0)/(n-1)), sr = m/sd*Math.sqrt(252), yrs = n/252, se = Math.sqrt((1+sr*sr/2)/yrs);
+  let v = 1, pk = 1, dd = 0; for (const x of a) { v *= 1+x; pk = Math.max(pk, v); dd = Math.min(dd, v/pk-1); } return { sr, se, lo: sr-1.96*se, hi: sr+1.96*se, ann: Math.pow(v, 252/n)-1, dd }; }
+function corr(a, b) { const n = a.length, ma = a.reduce((p,q)=>p+q,0)/n, mb = b.reduce((p,q)=>p+q,0)/n; let sab = 0, sa = 0, sb = 0; for (let i = 0; i < n; i++) { sab += (a[i]-ma)*(b[i]-mb); sa += (a[i]-ma)**2; sb += (b[i]-mb)**2; } return sab/Math.sqrt(sa*sb); }
+function dsr(k1, k2) { const a = stats(BT.ret[k1]), b = stats(BT.ret[k2]), r = corr(BT.ret[k1], BT.ret[k2]), d = a.sr - b.sr, se = Math.sqrt(Math.max(1e-9, a.se*a.se + b.se*b.se - 2*r*a.se*b.se)); return { d, lo: d-1.96*se, hi: d+1.96*se }; }
+const sgn = x => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(2);
+const iv = (lo, hi) => `[${sgn(lo)}, ${sgn(hi)}]`;
+let btDone = false;
+function drawBacktest() {
+  if (btDone) return; btDone = true;
+  const keys = [['st','Strategy',css('--pru')],['b1','B1 SPY',css('--ink3')],['b2','B2 1/N',css('--em')],['b3','B3 no states','#C08A3E'],['b4','B4 per-asset chains','#7FB79E'],['b5','B5 placebo','#B07AA1']];
+  const W = 760, H = 220, L = 52, all = keys.flatMap(k => BT[k[0]]), lo = Math.min(...all), hi = Math.max(...all), n = BT.st.length;
+  const sx = i => L + i/(n-1)*(W-L-8), sy = v => 8 + (hi - v)/(hi - lo)*(H - 28);
+  let g = ''; for (let k = 0; k <= 4; k++) { const v = lo + (hi-lo)*k/4; g += `<line x1="${L}" x2="${W-8}" y1="${sy(v)}" y2="${sy(v)}" stroke="${css('--line')}"/><text x="${L-5}" y="${sy(v)+3}" font-size="10" text-anchor="end" fill="${css('--ink3')}">$${Math.round(v/1000)}k</text>`; }
+  [2013,2014,2015,2016,2017,2018,2019].forEach((y,i) => g += `<text x="${sx(i*252)}" y="${H-6}" font-size="10" fill="${css('--ink3')}">${y}</text>`);
+  keys.slice().reverse().forEach(k => { let d = ''; for (let i = 0; i < n; i += 4) d += (d ? 'L' : 'M') + sx(i).toFixed(1) + ' ' + sy(BT[k[0]][i]).toFixed(1); g += `<path d="${d}" fill="none" stroke="${k[2]}" stroke-width="${k[0]==='st'?2.2:1.3}"/>`; });
+  $('#bt-eq').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Equity curves">${g}</svg>`;
+  $('#bt-leg').innerHTML = keys.map(k => `<span><i style="background:${k[2]}"></i>${k[1]}</span>`).join('');
+  const TURN = { st:'410%', b1:'0%', b2:'24%', b3:'96%', b4:'385%', b5:'402%' };
+  $('#bt-m').innerHTML = '<thead><tr><th>Strategy</th><th class="r">Ann. return</th><th class="r">Sharpe [95%]</th><th class="r">Max DD</th><th class="r">Turnover / yr</th></tr></thead><tbody>' +
+    keys.map(k => { const x = stats(BT.ret[k[0]]); return `<tr><td>${k[1]}</td><td class="r num">${pct(x.ann,1)}</td><td class="r num">${f(x.sr,2)} [${f(x.lo,2).replace('-','−')}, ${f(x.hi,2)}]</td><td class="r num">${pct(x.dd,1).replace('-','−')}</td><td class="r num">${TURN[k[0]]}</td></tr>`; }).join('') + '</tbody>';
+  const h2 = dsr('st','b3'), h3a = dsr('st','b2'), h3b = dsr('st','b1'), h4 = dsr('st','b4'), out = x => x.lo > 0;
+  const HR = [['H1 forecast skill (BSS)', '+0.004 [−0.002, +0.010]', false], ['H2 vs B3 (ΔSharpe)', `${sgn(h2.d)} ${iv(h2.lo,h2.hi)}`, out(h2)], ['H3 vs B2 / vs B1', `${sgn(h3a.d)} ${iv(h3a.lo,h3a.hi)} / ${sgn(h3b.d)} ${iv(h3b.lo,h3b.hi)}`, out(h3a) && out(h3b)], ['H4 vs B4 (ΔSharpe)', `${sgn(h4.d)} ${iv(h4.lo,h4.hi)}`, out(h4)]];
+  $('#bt-h').innerHTML = '<thead><tr><th>ID</th><th>Estimate [95%]</th><th>Outcome</th></tr></thead><tbody>' +
+    HR.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2] ? '<span class="tag t-ok">supported</span>' : '<span class="tag t-n">not supported</span>'}</td></tr>`).join('') +
+    '<tr><td>H5 placebo (BSS)</td><td class="num">−0.001 [−0.007, +0.005]</td><td><span class="tag t-ok">control passed</span></td></tr></tbody>';
+  $('#bt-f').innerHTML = '<thead><tr><th>Fold</th><th>Training decisions</th><th>Purged</th><th>Test</th></tr></thead><tbody>' +
+    [['1','2005-01-04 to 2012-12-27','2012-12-28, 2012-12-31','2013'],['2','2005-01-04 to 2013-12-27','2013-12-30, 2013-12-31','2014'],['3–6','expanding yearly','last two sessions','2015–2018'],['7','2005-01-04 to 2018-12-27','2018-12-28, 2018-12-31','2019']]
+    .map(r => `<tr><td class="num">${r[0]}</td><td class="num">${r[1]}</td><td class="num hint">${r[2]}</td><td class="num">${r[3]}</td></tr>`).join('') + '</tbody>';
+  $('#bt-hold').innerHTML = `<p style="margin-bottom:8px"><span class="tag t-w">Locked — not evaluated</span> Configurations evaluated on development folds: <b class="num">12</b></p><button class="btn" type="button" id="bt-fin">Finalize configuration cfg-3012a…</button><p class="hint" id="bt-finmsg" style="margin-top:6px"></p>`;
+  $('#bt-fin').onclick = e => { if (e.target.dataset.armed !== '1') { e.target.dataset.armed = '1'; e.target.textContent = 'Confirm: record hash and count, then evaluate 2020–2025 once'; return; } e.target.disabled = true; $('#bt-finmsg').textContent = 'Finalized: configuration hash and the count of 12 configurations recorded. The holdout run is queued (synthetic demo).'; };
+}
+
+// ------------------------------------------------------------ SC-08
+const STAGES = ['Ingestion','Validation','Encoding','Counting','Estimation','Optimization','Backtest','Baselines and statistics'];
+const JOBS = [{id:'R-3014', name:'SPY-GLD daily', st:'running', stage:5, sub:'08:36 UTC', upd:'08:41:12 UTC'}, {id:'R-3013', name:'SPY-TLT, cap 50%', st:'queued', stage:-1, sub:'08:38 UTC', upd:'08:38:02 UTC'},
+  {id:'R-3009', name:'SPY-TLT-GLD, k = 1', st:'failed', stage:3, sub:'yesterday', upd:'yesterday', why:'Counting stopped: 41% of contexts are below n_floor for m = 3, s = 3, k = 1. Reduce the group size or the number of categories.'}, {id:'R-3012', name:'SPY-TLT daily joint state', st:'done', stage:8, sub:'2 days ago', upd:'2 days ago'}];
+function drawJobs() {
+  $('#jobcnt').textContent = JOBS.filter(j => j.st === 'running' || j.st === 'queued').length || '';
+  $('#jobs').innerHTML = JOBS.map(j => { const stg = STAGES.map((s,i) => `<span class="stage ${j.st === 'failed' && i === j.stage ? 'f' : i < j.stage || j.st === 'done' ? 'd' : i === j.stage && j.st === 'running' ? 'a' : ''}">${s}</span>`).join('');
+    const prog = j.st === 'running' ? `Stage ${j.stage+1} of 8: ${STAGES[j.stage]}` : j.st === 'queued' ? 'Waiting for a worker' : j.st === 'done' ? 'All 8 stages completed' : j.st === 'cancelled' ? 'Cancelled after the current stage' : `Failed during ${STAGES[j.stage]}`;
+    const act = j.st === 'running' || j.st === 'queued' ? `<button class="btn dng" type="button" data-cancel="${j.id}">Cancel run</button>` : j.st === 'done' ? '<button class="btn" type="button" data-go="overview">Open result</button>' : j.st === 'failed' ? '<button class="btn" type="button" data-go="builder">Rerun as new run</button>' : '';
+    return `<div class="card job"><div class="hd"><span class="num hint">${j.id}</span><b style="flex:1">${j.name}</b>${st(j.st)}${act}</div><div>${stg}</div><div class="meta"><span>${prog}</span><span>Submitted ${j.sub}</span><span>Last updated ${j.upd}</span></div>${j.why ? `<div class="note err" style="margin:10px 0 0"><span>${j.why}</span></div>` : ''}</div>`; }).join('');
+  document.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = 'Confirm cancel'; return; } const j = JOBS.find(x => x.id === b.getAttribute('data-cancel')); j.st = 'cancelled'; j.upd = 'just now'; drawJobs(); });
+}
+$('#jobs-refresh').onclick = () => { const t = new Date().toISOString().slice(11,19) + ' UTC'; JOBS.forEach(j => { if (j.st === 'running' || j.st === 'queued') j.upd = t; }); drawJobs(); };
+
+// ------------------------------------------------------------ review pages
+const lvl = v => `<span class="tag ${v === 'Critical' ? 't-x' : v === 'High' ? 't-w' : 't-n'}">${v}</span>`;
+$('#rk').innerHTML = '<thead><tr><th>ID</th><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Owner</th></tr></thead><tbody>' + [['R-01','Data leakage into training or estimates','Medium','Critical','Aseel'],['R-02','Sparse joint states','High','High','Seba'],['R-03','Overfitting and multiple testing','High','High','Aseel'],['R-04','Non-stationary transition probabilities','High','High','Seba'],['R-05','Unrealistic execution assumptions','Medium','Critical','Seba'],['R-06','Weak predictive value','High','High','Aseel'],['R-07','Survivorship and universe selection bias','Medium','High','Seba'],['R-08','Unstable conditional moments and weights','Medium','High','Aseel'],['R-09','Data provider quality and terms','Medium','High','Seba'],['R-10','Results misread as investment advice','Medium','High','Aseel'],['R-11','Scope and integration delays','High','High','Baraa'],['R-12','Schedule slippage or unavailable member','Medium','High','All'],['R-13','Exposure of another user’s data','Medium','High','Baraa'],['R-14','Resource exhaustion by heavy runs','Medium','Medium','Baraa'],['R-15','Vulnerable dependency','Low','High','Baraa'],['R-16','Prototype numbers mistaken for results','Medium','High','Baraa']].map(r => `<tr><td class="num">${r[0]}</td><td>${r[1]}</td><td>${lvl(r[2])}</td><td>${lvl(r[3])}</td><td class="hint">${r[4]}</td></tr>`).join('') + '</tbody>';
+$('#ng').innerHTML = '<tbody>' + [['NG-01','Brokerage services and real orders'],['NG-02','Intraday data'],['NG-03','Performance guarantees'],['NG-04','Stocks, options, futures, cryptocurrencies'],['NG-05','Personal advice'],['NG-06','Native mobile applications'],['NG-07','Social and commercial features'],['NG-08','Fundamental and sentiment analysis'],['NG-09','Automated real-world execution'],['NG-10','Unbounded configurations'],['NG-11','Long-Short simulation in this version'],['NG-12','Production hardening']].map(n => `<tr><td class="num" style="width:70px">${n[0]}</td><td>${n[1]}</td></tr>`).join('') + '</tbody>';
+const sTag = s => s.startsWith('Closed') ? 't-ok' : s === 'Open' ? 't-w' : 't-n';
+$('#oi').innerHTML = '<thead><tr><th>ID</th><th>Topic</th><th>Status</th><th>Owner</th><th>Target</th></tr></thead><tbody>' + [['OI-01','Long-Short mode','Deferred','Aseel','Beta, 4 Jun 2027'],['OI-02','Universe, history, return convention','Closed — proposed','Seba','27 Nov 2026'],['OI-03','Categories, order, smoothing, support','Closed — proposed','Seba','27 Nov 2026'],['OI-04','Classifier and calibration','Deferred','Aseel','Alpha, 26 Mar 2027'],['OI-05','Scoring and allocation method','Closed — proposed','Aseel','27 Nov 2026'],['OI-06','Walk-forward windows','Closed — proposed','Baraa','27 Nov 2026'],['OI-07','Execution, costs, benchmark','Closed — proposed','Seba','27 Nov 2026'],['OI-08','Technology stack','Closed','Baraa','SDD, 22 Jan 2027'],['OI-09','Account policy','Closed','Baraa','27 Nov 2026'],['OI-10','Export schema and retention','Open','Baraa','SDD, 22 Jan 2027'],['OI-11','Performance targets','Open','Baraa','Alpha, 26 Mar 2027'],['OI-12','Screen design sign-off','Open','All','27 Nov 2026'],['OI-13','Data provider terms','Open','Seba','M1, 25 Dec 2026'],['OI-14','Security scope','Closed','Baraa','27 Nov 2026']].map(o => `<tr><td class="num">${o[0]}</td><td>${o[1]}</td><td><span class="tag ${sTag(o[2])}">${o[2]}</span></td><td class="hint">${o[3]}</td><td class="num hint">${o[4]}</td></tr>`).join('') + '</tbody>';
+
+// ------------------------------------------------------------ init
+drawOverview(); validate(); drawTrans(); drawQuality(); drawOpt(); drawJobs();
+show(location.hash.slice(1) || 'overview');
+</script>
+</body>
+</html>
