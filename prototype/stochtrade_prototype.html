@@ -255,7 +255,7 @@ svg text{font-family:var(--mono)}
 
     <!-- SC-02 -->
     <section class="view" id="v-overview" aria-label="Overview">
-      <div class="note warn"><span><b>Simulated research output — not investment advice.</b> The latest decision of run R-3012 (development folds 2013–2019).</span></div>
+      <div class="note warn"><span><b>Simulated research output — not investment advice.</b> The latest decision of run R-3012 (training folds 2013–2019).</span></div>
       <div class="grid g4" id="ov-kpis"></div>
       <div class="grid g21">
         <div class="card"><h3>Latest decision <small>context SPY low · TLT high · weights as % of portfolio equity</small></h3><div class="scroll"><table id="ov-w"></table></div>
@@ -275,27 +275,34 @@ svg text{font-family:var(--mono)}
             <div class="field"><span class="fl">History</span><span class="num">2005-01-03 to 2025-12-31</span></div>
           </div>
           <div class="grp"><h4>State model</h4>
-            <div class="field"><span class="fl">Period P (sessions)</span><div class="seg" id="sb-P"></div></div>
+            <div class="field"><label for="sb-P">Period P (sessions)</label><div><input class="in num" id="sb-P" type="number" min="1" max="63" value="1" style="width:70px"> <span class="hint">1–63 · 5 = week, 21 = month</span></div></div>
+            <div class="field"><span class="fl">Holding scenario</span><div class="seg" id="sb-hold"></div></div>
             <div class="field"><label for="sb-s">Categories per asset s</label><div><input type="range" id="sb-s" min="2" max="5" value="3" style="width:140px"> <span class="num" id="sb-sv">3</span></div></div>
-            <div class="field"><label for="sb-k">Markov order k</label><div><input type="range" id="sb-k" min="1" max="3" value="1" style="width:140px"> <span class="num" id="sb-kv">1</span></div></div>
+            <div class="field"><label for="sb-k">Markov order k</label><div><input type="range" id="sb-k" min="1" max="8" value="1" style="width:140px"> <span class="num" id="sb-kv">1</span></div></div>
             <div class="field"><span class="fl">Boundaries</span><div class="seg" id="sb-bnd"></div></div>
-            <div class="field"><label for="sb-alpha">Smoothing α</label><input class="in num" id="sb-alpha" value="9"></div>
+            <div class="field"><label for="sb-alpha">Smoothing α (optional)</label><div><input class="in num" id="sb-alpha" value="0" style="width:70px"> <span class="hint">0 = off (default)</span></div></div>
             <div class="field"><span class="fl">Support n_min / n_floor</span><div style="display:flex;gap:6px"><input class="in num" id="sb-nmin" value="100" style="width:70px" aria-label="n_min"><input class="in num" id="sb-nfloor" value="30" style="width:70px" aria-label="n_floor"></div></div>
-            <div class="field"><label for="sb-tau">Shrinkage τ</label><input class="in num" id="sb-tau" value="100"></div>
+            <div class="field"><label for="sb-tau">Shrinkage τ (optional)</label><div><input class="in num" id="sb-tau" value="0" style="width:70px"> <span class="hint">0 = off (default)</span></div></div>
+            <div class="field"><span class="fl">Representative return</span><div class="seg" id="sb-rep"></div></div>
           </div>
           <div class="grp"><h4>Allocation and execution</h4>
-            <div class="field"><span class="fl">Cap / gross target (%)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-cap" value="70" style="width:70px" aria-label="Cap"><input class="in num" id="sb-G" value="100" style="width:70px" aria-label="Gross target"></div></div>
+            <div class="field"><span class="fl">Allocation mode</span><div class="seg" id="sb-mode"></div></div>
+            <div class="field"><label for="sb-rb">Short borrowing cost (% / year)</label><input class="in num" id="sb-rb" value="1"></div>
+            <div class="field"><span class="fl">Cap / gross target (%)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-cap" value="100" style="width:70px" aria-label="Cap"><input class="in num" id="sb-G" value="100" style="width:70px" aria-label="Gross target"></div></div>
+            <div class="field"><label for="sb-cm">Cost model</label><select class="in" id="sb-cm"><option value="pct">Percentage of traded amount</option><option value="share">Per share, with a minimum</option><option value="zero">Zero commission</option></select></div>
             <div class="field"><span class="fl">Fees / slippage (bps)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-fee" value="5" style="width:70px" aria-label="Fees"><input class="in num" id="sb-slip" value="5" style="width:70px" aria-label="Slippage"></div></div>
             <div class="field"><label for="sb-band">No-trade band (points)</label><input class="in num" id="sb-band" value="2"></div>
           </div>
           <div class="grp"><h4>Evaluation</h4>
-            <div class="field"><span class="fl">Development / holdout</span><span class="num">2013–2019 / 2020–2025 (locked)</span></div>
+            <div class="field"><span class="fl">Holdout segment (years)</span><div style="display:flex;gap:6px;align-items:center"><input class="in num" id="sb-h0" value="2020" style="width:70px" aria-label="Holdout first year">–<input class="in num" id="sb-h1" value="2025" style="width:70px" aria-label="Holdout last year"> <span class="hint">locked until finalized</span></div></div>
+            <div class="field"><span class="fl">Training folds</span><span class="num" id="sb-train">2013–2019, one-year test folds</span></div>
             <div class="field"><span class="fl">Bootstrap</span><span class="num">blocks of 21 periods · 2,000 resamples</span></div>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn" type="button" id="sb-save">Save draft</button><button class="btn pri" type="button" id="sb-run">Run on development folds</button><span class="hint" id="sb-msg" role="status" style="align-self:center"></span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn" type="button" id="sb-save">Save draft</button><button class="btn pri" type="button" id="sb-run">Run on training folds</button><span class="hint" id="sb-msg" role="status" style="align-self:center"></span></div>
         </div>
         <div>
           <div class="card" style="margin-bottom:12px"><h3>Feasibility preview <small>FR-02, FR-07</small></h3><div class="mono-box" id="sb-feas"></div></div>
+          <div class="card" style="margin-bottom:12px"><h3>Category splits <small>expected occurrences per joint state and transitions per context</small></h3><div class="scroll"><table id="sb-splits"></table></div><p class="hint" style="margin-top:6px">Fixed-threshold shares are synthetic illustrations; the real system counts them from the snapshot.</p></div>
           <div class="card"><h3>Validation</h3><ul class="vlist" id="sb-val"></ul></div>
         </div>
       </div>
@@ -316,8 +323,8 @@ svg text{font-family:var(--mono)}
       <div class="tabs" role="tablist" id="mi-tabs"></div>
       <div id="mi-trans">
         <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="hint" for="mi-ctx">Context (last joint state)</label><select class="in" id="mi-ctx" style="max-width:220px"></select><span id="mi-ctxinfo"></span></div></div>
-        <div class="card"><h3>Next-state distribution <small>SPY + TLT · s = 3 · k = 1 · α = 9 · rows sum to 1</small></h3><div class="scroll"><table id="mi-table"></table></div>
-          <p class="hint" style="margin-top:8px">p(j | c) = (n_c,j + α·π_j) / (n_c + α). Wide intervals mean a probability should not be trusted on its own; that is why the moments are shrunk.</p></div>
+        <div class="card"><h3>Next-state distribution <small>SPY + TLT · s = 3 · k = 1 · empirical frequencies · rows sum to 1</small></h3><div class="scroll"><table id="mi-table"></table></div>
+          <p class="hint" style="margin-top:8px">p(j | c) = n_c,j / n_c. Wide intervals mean a probability should not be trusted on its own; that is why low-support contexts are flagged and unsupported ones back off.</p></div>
       </div>
       <div id="mi-quality" hidden><div class="grid g2">
         <div class="card"><h3>Support by context <small>training transitions per context, fold 7</small></h3><div id="mi-bars"></div></div>
@@ -331,8 +338,10 @@ svg text{font-family:var(--mono)}
     <section class="view" id="v-optimize" hidden aria-label="Optimization explorer">
       <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
         <label class="hint" for="op-case">Decision</label><select class="in" id="op-case" style="max-width:300px"><option value="main">Context LH — worked example (SRS 3.5)</option><option value="cash">Second context — cash case (SRS Section 3.5)</option></select>
-        <label class="hint" for="op-cap">Cap %</label><input class="in num" id="op-cap" value="70" style="width:70px">
-        <label class="hint" for="op-tau">τ</label><input class="in num" id="op-tau" value="100" style="width:70px">
+        <label class="hint" for="op-mode">Mode</label><select class="in" id="op-mode" style="max-width:140px"><option value="long">Long-only</option><option value="ls">Long-short</option></select>
+        <label class="hint" for="op-rb">Borrow %/yr</label><input class="in num" id="op-rb" value="0" style="width:60px">
+        <label class="hint" for="op-cap">Cap %</label><input class="in num" id="op-cap" value="100" style="width:70px">
+        <label class="hint" for="op-tau">τ (optional)</label><input class="in num" id="op-tau" value="0" style="width:60px">
       </div></div>
       <div class="grid g2">
         <div class="card"><h3>Conditional estimates <small>per session · % and %²</small></h3><div class="mono-box" id="op-est"></div></div>
@@ -343,15 +352,16 @@ svg text{font-family:var(--mono)}
 
     <!-- SC-07 -->
     <section class="view" id="v-backtest" hidden aria-label="Backtest lab">
-      <div class="card" style="margin-bottom:12px"><h3>Equity curves <small>development folds 2013–2019 · growth of $100,000 · synthetic</small></h3><div id="bt-eq"></div><div class="legend" id="bt-leg" style="margin-top:6px"></div></div>
+      <div class="note warn"><span><b>Demonstration only.</b> Series are synthetic, and the intervals here use an analytic approximation; the system will use the block bootstrap of FR-13.</span></div>
+      <div class="card" style="margin-bottom:12px"><h3>Equity curves <small>training folds 2013–2019 · growth of $100,000 · synthetic</small></h3><div id="bt-eq"></div><div class="legend" id="bt-leg" style="margin-top:6px"></div></div>
       <div class="grid g2">
         <div class="card"><h3>Metrics with 95% intervals</h3><div class="scroll"><table id="bt-m"></table></div></div>
         <div class="card"><h3>Hypotheses report <small>pre-registered, Table 5 of the SRS</small></h3><div class="scroll"><table id="bt-h"></table></div></div>
       </div>
       <div class="grid g2">
         <div class="card"><h3>Folds <small>purged decisions shown</small></h3><div class="scroll"><table id="bt-f"></table></div></div>
-        <div class="card"><h3>Holdout 2020–2025 <small>FR-11</small></h3><div id="bt-hold"></div>
-          <h3 style="margin-top:12px">Assumptions</h3><div class="mono-box">Decision at close, fill at next unadjusted open · 5 bps fees + 5 bps slippage · band 2 points · benchmark SPY · simple open-to-open returns · r_f = 0 · annualization √252</div></div>
+        <div class="card"><h3>Holdout segment (default 2020–2025) <small>FR-11</small></h3><div id="bt-hold"></div>
+          <h3 style="margin-top:12px">Assumptions</h3><div class="mono-box">Decision at close, fill at next unadjusted open · open-to-open holding · long-only · percentage cost model: 5 bps fees + 5 bps slippage · band 2 points · benchmark SPY · simple open-to-open returns · r_f = 0 · annualization √252</div></div>
       </div>
     </section>
 
@@ -389,23 +399,37 @@ const COUNTS = {
 };
 // synthetic counts for the other contexts of the transition table
 (function(){ const r = mulberry32(31); J.forEach(c => { if (c === 'LH') return; const tot = Math.round(460 + r() * 260); const w = PI.map(p => p * (0.75 + 0.5 * r())); const sw = w.reduce((a,b)=>a+b,0); const cnt = w.map(x => Math.floor(tot * x / sw)); cnt[4] += tot - cnt.reduce((a,b)=>a+b,0); COUNTS[c] = cnt; }); })();
-function probs(n, alpha = 9) { const nc = n.reduce((a,b)=>a+b,0); return n.map((x,i) => (x + alpha * PI[i]) / (nc + alpha)); }
+// FR-06: empirical frequencies by default; optional smoothing only if alpha > 0
+function probs(n, alpha = 0) { const nc = n.reduce((a,b)=>a+b,0); return alpha > 0 ? n.map((x,i) => (x + alpha * PI[i]) / (nc + alpha)) : n.map(x => nc ? x / nc : 0); }
 function moments(p) { const mu = [0,1].map(a => p.reduce((s,pi,j) => s + pi * R[j][a], 0)); const S = [[0,0],[0,0]]; p.forEach((pi,j) => { const d = [R[j][0]-mu[0], R[j][1]-mu[1]]; for (let a=0;a<2;a++) for (let b=0;b<2;b++) S[a][b] += pi * d[a] * d[b]; }); return { mu, S }; }
 function wilson(k, n) { if (!n) return [0, 1]; const z = 1.96, ph = k / n, den = 1 + z*z/n, c = (ph + z*z/(2*n)) / den, h = z * Math.sqrt(ph*(1-ph)/n + z*z/(4*n*n)) / den; return [Math.max(0, c - h), Math.min(1, c + h)]; }
-function optimize(n, cap = 0.70, tau = 100, G = 1, rf = 0) {
-  const nc = n.reduce((a,b)=>a+b,0), p = probs(n), mc = moments(p), m0 = moments(PI), lam = nc / (nc + tau);
+// FR-08/FR-09: no shrinkage by default (tau = 0); long-only by default, long-short as an option
+function optimize(n, o = {}) {
+  const cap = o.cap ?? 1, tau = o.tau ?? 0, G = o.G ?? 1, rf = o.rf ?? 0, mode = o.mode || 'long', rb = o.rb ?? 0, alpha = o.alpha ?? 0;
+  const nc = n.reduce((a,b)=>a+b,0), p = probs(n, alpha), mc = moments(p), m0 = moments(PI), lam = tau > 0 ? nc / (nc + tau) : 1;
   const mu = [0,1].map(a => lam * mc.mu[a] + (1 - lam) * m0.mu[a]);
   const S = [0,1].map(a => [0,1].map(b => lam * mc.S[a][b] + (1 - lam) * m0.S[a][b] + (a === b ? 1e-8 : 0)));
-  const e = mu.map(x => x - rf); let d = null, why = '';
-  if (Math.max(...e) > 0) {
-    const det = S[0][0]*S[1][1] - S[0][1]*S[1][0], t = [(S[1][1]*e[0] - S[0][1]*e[1]) / det, (-S[1][0]*e[0] + S[0][0]*e[1]) / det];
-    if (t[0] > 0 && t[1] > 0) { const s = t[0] + t[1]; d = [t[0]/s, t[1]/s]; }
-    else { const sr = [e[0] / Math.sqrt(S[0][0]), e[1] / Math.sqrt(S[1][1])]; d = sr[0] >= sr[1] ? [1,0] : [0,1]; }
+  const e = mu.map(x => x - rf);
+  // enumerate sign patterns: each asset long (+1), short (-1) or not held (0); keep the best positive Sharpe
+  const signs = mode === 'ls' ? [-1,0,1] : [0,1]; let best = null;
+  for (const s0 of signs) for (const s1 of signs) {
+    const sg = [s0, s1], idx = [0,1].filter(i => sg[i] !== 0); if (!idx.length) continue;
+    const a = idx.map(i => sg[i] > 0 ? e[i] : -e[i] - rb), Q = idx.map(i => idx.map(j => sg[i]*sg[j]*S[i][j]));
+    let t;
+    if (idx.length === 1) t = [a[0] / Q[0][0]];
+    else { const det = Q[0][0]*Q[1][1] - Q[0][1]*Q[1][0]; t = [(Q[1][1]*a[0] - Q[0][1]*a[1]) / det, (-Q[1][0]*a[0] + Q[0][0]*a[1]) / det]; }
+    if (t.some(x => !(x > 0))) continue;
+    const ex = t.reduce((q,x,k)=>q+x*a[k],0); if (ex <= 0) continue;
+    let v = 0; t.forEach((x,k) => t.forEach((y,l) => v += x*y*Q[k][l]));
+    const sr = ex / Math.sqrt(v), tot = t.reduce((q,x)=>q+x,0), d = [0,0]; idx.forEach((i,k) => d[i] = sg[i] * t[k] / tot);
+    if (!best || sr > best.sr) best = { d, sr };
   }
-  let w = [0,0], s = 0;
-  if (d) { s = Math.min(G, cap / Math.max(...d)); w = d.map(x => s * x); why = s < G ? 'cap' : 'gross target'; }
-  const E = w[0]*mu[0] + w[1]*mu[1], sd = Math.sqrt(w[0]*w[0]*S[0][0] + 2*w[0]*w[1]*S[0][1] + w[1]*w[1]*S[1][1]);
-  return { nc, p, mc, m0, lam, mu, S, e, d, s, w, cash: 1 - w[0] - w[1], why, E, sd, sr: sd > 0 ? E / sd : null };
+  const d = best ? best.d : null; let w = [0,0], sc = 0, why = '';
+  if (d) { sc = Math.min(G, cap / Math.max(...d.map(Math.abs))); w = d.map(x => sc * x); why = sc < G ? 'cap' : 'gross target'; }
+  const borrow = w.reduce((q,x)=>q + (x < 0 ? -x*rb : 0),0);
+  const E = w[0]*e[0] + w[1]*e[1] - borrow, sd = Math.sqrt(w[0]*w[0]*S[0][0] + 2*w[0]*w[1]*S[0][1] + w[1]*w[1]*S[1][1]);
+  const gross = Math.abs(w[0]) + Math.abs(w[1]), longW = Math.max(0,w[0]) + Math.max(0,w[1]);
+  return { nc, p, mc, m0, lam, tau, mu, S, e, d, s: sc, w, cash: 1 - longW, gross, why, E, sd, sr: sd > 0 ? E / sd : null, mode };
 }
 const SUPPORT = n => n >= 100 ? ['supported','t-ok'] : n >= 30 ? ['low support','t-w'] : ['unsupported: back-off','t-x'];
 
@@ -453,7 +477,7 @@ const MAIN = optimize(COUNTS.LH);
 function drawOverview() {
   const sp = SUPPORT(MAIN.nc);
   $('#ov-kpis').innerHTML = kpi('Current context', 'SPY low · TLT high', `n_c = ${MAIN.nc} · <span class="tag ${sp[1]}">${sp[0]}</span>`) +
-    kpi('Expected excess return', f(MAIN.E, 4) + '%', 'per session, before costs') + kpi('Expected volatility', f(MAIN.sd, 3) + '%', 'per session') + kpi('Cash', pct(MAIN.cash, 1), 'no cap binding');
+    kpi('Expected excess return', f(MAIN.E, 4) + '%', 'per session, before costs') + kpi('Expected volatility', f(MAIN.sd, 3) + '%', 'per session') + kpi('Cash', pct(MAIN.cash, 1), 'long-only · no cap');
   $('#ov-w').innerHTML = '<thead><tr><th>ETF</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th><th class="r">Expected excess return</th></tr></thead><tbody>' +
     ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(MAIN.w[i])}</td><td class="r num">${money(100000*MAIN.w[i])}</td><td class="r num">${f(MAIN.mu[i],5)}%</td></tr>`).join('') +
     `<tr><td class="tk">Cash</td><td class="r num">${pct(MAIN.cash)}</td><td class="r num">${money(100000*MAIN.cash)}</td><td class="r num">0</td></tr></tbody>`;
@@ -464,31 +488,49 @@ function drawOverview() {
 
 // ------------------------------------------------------------ SC-03
 const UNIV = ['SPY','QQQ','IWM','DIA','EFA','EEM','TLT','IEF','GLD','VNQ','XLK','XLF','XLE','XLV','XLU'];
-const SB = { group: new Set(['SPY','TLT']), P: 1, bnd: 'q' };
+const SB = { group: new Set(['SPY','TLT']), bnd: 'q', hold: 'oo', rep: 'mean', mode: 'long' };
 UNIV.forEach(t => { const b = el('button', {class:'chip', type:'button', 'aria-pressed':String(SB.group.has(t))}, t); b.onclick = () => { SB.group.has(t) ? SB.group.delete(t) : SB.group.add(t); b.setAttribute('aria-pressed', String(SB.group.has(t))); validate(); }; $('#sb-univ').appendChild(b); });
-seg('#sb-P', [{k:1,l:'1'},{k:5,l:'5'},{k:21,l:'21'}], 1, k => { SB.P = k; validate(); });
+seg('#sb-hold', [{k:'oo',l:'Open-to-open'},{k:'oc',l:'Open-to-close'}], 'oo', k => { SB.hold = k; validate(); });
+seg('#sb-rep', [{k:'mean',l:'Mean'},{k:'median',l:'Median'},{k:'mode',l:'Pseudo-mode'}], 'mean', k => { SB.rep = k; validate(); });
+seg('#sb-mode', [{k:'long',l:'Long-only'},{k:'ls',l:'Long-short'}], 'long', k => { SB.mode = k; $('#sb-rb').disabled = k !== 'ls'; validate(); });
+$('#sb-rb').disabled = true;
 seg('#sb-bnd', [{k:'q',l:'Training quantiles'},{k:'f',l:'Fixed thresholds'}], 'q', k => { SB.bnd = k; validate(); });
 ['sb-s','sb-k'].forEach(id => $('#'+id).addEventListener('input', () => { $('#'+id+'v').textContent = $('#'+id).value; validate(); }));
-['sb-name','sb-alpha','sb-nmin','sb-nfloor','sb-tau','sb-cap','sb-G','sb-fee','sb-slip','sb-band'].forEach(id => $('#'+id).addEventListener('input', validate));
+['sb-name','sb-P','sb-alpha','sb-nmin','sb-nfloor','sb-tau','sb-cap','sb-G','sb-fee','sb-slip','sb-band','sb-rb','sb-cm','sb-h0','sb-h1'].forEach(id => $('#'+id).addEventListener('input', validate));
 function poissonBelow(k, lam) { let s = 0, t = Math.exp(-lam); for (let i = 0; i < k; i++) { s += t; t *= lam / (i + 1); } return Math.min(1, s); }
 let sbOK = false;
 function validate() {
-  const m = SB.group.size, s = +$('#sb-s').value, k = +$('#sb-k').value, nmin = +$('#sb-nmin').value, nfl = +$('#sb-nfloor').value;
-  const sess = Math.round(5290 / SB.P), ctx = Math.pow(s, m * k), nxt = Math.pow(s, m), per = sess / ctx, cell = per / nxt, below = poissonBelow(nmin, per);
-  $('#sb-feas').innerHTML = `group m = <b>${m}</b> · s = <b>${s}</b> · k = <b>${k}</b> · P = <b>${SB.P}</b><br>contexts s<sup>m·k</sup> = <b>${ctx.toLocaleString()}</b> · next states s<sup>m</sup> = <b>${nxt}</b><br>periods in history ≈ <b>${sess.toLocaleString()}</b><br>observations per context ≈ <b>${per.toFixed(1)}</b> · per transition cell ≈ <b>${cell.toFixed(2)}</b><br>contexts expected below n_min (uniform approx.) ≈ <b>${pct(below, 0)}</b>` +
+  const m = SB.group.size, s = +$('#sb-s').value, k = +$('#sb-k').value, nmin = +$('#sb-nmin').value, nfl = +$('#sb-nfloor').value, P = Math.round(+$('#sb-P').value || 0);
+  const sess = Math.round(5290 / Math.max(1, P)), ctx = Math.pow(s, m * k), nxt = Math.pow(s, m), per = sess / ctx, cell = per / nxt, below = poissonBelow(nmin, per);
+  $('#sb-feas').innerHTML = `group m = <b>${m}</b> · s = <b>${s}</b> · k = <b>${k}</b> · P = <b>${P}</b><br>contexts s<sup>m·k</sup> = <b>${ctx.toLocaleString()}</b> · next states s<sup>m</sup> = <b>${nxt}</b><br>periods in history ≈ <b>${sess.toLocaleString()}</b><br>observations per context ≈ <b>${per.toFixed(1)}</b> · per transition cell ≈ <b>${cell.toFixed(2)}</b><br>contexts expected below n_min (uniform approx.) ≈ <b>${pct(below, 0)}</b>` +
     (per < nmin ? `<br><span class="dn">Warning: expected support is below n_min = ${nmin}. Reduce m, s, k, or P before running.</span>` : `<br><span class="up">Expected support is above n_min.</span>`);
   const items = []; const add = (c, t) => items.push([c, t]);
   m >= 2 && m <= 4 ? add('ok', `${m} assets in the joint state`) : add('x', 'Select 2 to 4 assets for the joint state');
-  ctx <= 729 ? add('ok', `${ctx} contexts (limit 729)`) : add('x', `${ctx.toLocaleString()} contexts exceed the limit of 729 (NFR-08)`);
+  P >= 1 && P <= 63 ? add('ok', `Period P = ${P} session${P > 1 ? 's' : ''}`) : add('x', 'P must be a whole number from 1 to 63');
+  add('ok', `${ctx.toLocaleString()} possible contexts; only those that occur in the data are stored`);
+  if (SB.hold === 'oc') add('w', 'Open-to-close: positions are opened and closed every period, so costs are higher');
+  if (SB.rep !== 'mean') add('w', `${SB.rep === 'median' ? 'Median' : 'Pseudo-mode'}: Σ p·r is a typical return, not an arithmetic expectation`);
+  if (SB.mode === 'ls') (+$('#sb-rb').value >= 0 ? add('ok', `Long-short: borrowing cost ${+$('#sb-rb').value}% per year; gross exposure ≤ G`) : add('x', 'Borrowing cost must be 0 or more'));
+  const h0 = +$('#sb-h0').value, h1 = +$('#sb-h1').value;
+  if (!(h0 >= 2006 && h1 <= 2025 && h0 <= h1)) add('x', 'Holdout must be a range of years within 2006–2025');
+  else if (h1 < 2025) add('w', 'Holdout is not at the end: it shows whether the structure exists in general, not a forward result; both boundaries are purged');
+  $('#sb-train').textContent = h0 >= 2006 && h1 <= 2025 && h0 <= h1 ? `${h1 < 2025 ? 'Years outside ' + h0 + '–' + h1 : 'Up to ' + (h0 - 1)}, one-year test folds` : '—';
   nfl > 0 && nfl < nmin ? add('ok', 'Support thresholds valid') : add('x', 'n_floor must be positive and below n_min');
   const cap = +$('#sb-cap').value, G = +$('#sb-G').value;
-  G > 0 && G <= 100 ? add('ok', `Gross target ${G}% ≤ 100%`) : add('x', `Gross target ${G}% rejected: Long-only cannot exceed 100%`);
-  cap > 0 && cap <= 100 ? (cap * m < G ? add('w', `Caps allow at most ${Math.min(100, cap * m)}% invested; the rest stays in cash`) : add('ok', `Cap ${cap}%`)) : add('x', 'Cap must be between 1% and 100%');
-  +$('#sb-alpha').value > 0 ? 0 : add('x', 'α must be positive');
-  if (SB.bnd === 'f') add('w', 'Fixed thresholds leave tail categories sparse; quantiles are recommended');
+  G > 0 && G <= 100 ? add('ok', `Gross target ${G}% ≤ 100% (no leverage)`) : add('x', `Gross target ${G}% rejected: exposure cannot exceed 100%`);
+  cap > 0 && cap <= 100 ? (cap === 100 ? add('ok', 'No cap (default)') : cap * m < G ? add('w', `Caps allow at most ${Math.min(100, cap * m)}% invested; the rest stays in cash`) : add('ok', `Optional cap ${cap}%`)) : add('x', 'Cap must be between 1% and 100%');
+  +$('#sb-alpha').value >= 0 && +$('#sb-tau').value >= 0 ? (+$('#sb-alpha').value > 0 || +$('#sb-tau').value > 0 ? add('w', 'Optional smoothing or shrinkage is on; the default is off') : add('ok', 'Empirical frequencies, no smoothing or shrinkage')) : add('x', 'α and τ must be 0 or more');
+  if (SB.bnd === 'f') add('w', 'Fixed thresholds: check the category-split preview for nearly empty states');
+  drawSplits(m, k, sess);
   if (per < nmin) add('w', 'Expected support below n_min (see preview)');
   sbOK = !items.some(i => i[0] === 'x');
   $('#sb-val').innerHTML = items.map(([c,t]) => `<li class="${c}"><i>${c === 'ok' ? '✓' : c === 'w' ? '!' : '✕'}</i><span>${t}</span></li>`).join('');
+}
+function drawSplits(m, k, sess) {
+  const rows = [['Quantiles, s = 2', [0.5,0.5]], ['Quantiles, s = 3', [1/3,1/3,1/3]], ['Fixed ±0.5%, s = 3 (synthetic shares)', [0.27,0.46,0.27]]];
+  $('#sb-splits').innerHTML = '<thead><tr><th>Split</th><th class="r">States</th><th class="r">Fewest occurrences</th><th class="r">Transitions per context</th><th></th></tr></thead><tbody>' + rows.map(([nm, sh]) => {
+    const st = Math.pow(sh.length, m), minSh = Math.pow(Math.min(...sh), m), ctx = Math.pow(sh.length, m * k), occ = sess * minSh, per = sess / ctx;
+    return `<tr><td>${nm}</td><td class="r num">${st}</td><td class="r num">${Math.round(occ).toLocaleString()}</td><td class="r num">${per.toFixed(1)}</td><td>${per >= +$('#sb-nmin').value ? '<span class="tag t-ok">enough</span>' : '<span class="tag t-w">low</span>'}</td></tr>`; }).join('') + '</tbody>';
 }
 $('#sb-save').onclick = () => { $('#sb-msg').textContent = 'Draft saved. No run was created.'; };
 $('#sb-run').onclick = () => { validate(); if (!sbOK) { $('#sb-msg').textContent = 'Fix the errors marked ✕. No run was created.'; return; } JOBS.unshift({ id:'R-' + (3015 + JOBS.filter(j => j.created).length), name:$('#sb-name').value.trim(), st:'queued', stage:-1, sub:'just now', upd:'just now', created:true }); drawJobs(); show('jobs'); };
@@ -501,7 +543,7 @@ $('#dr-meta').innerHTML = kv([['Snapshot', '<span class="num">D-2025-12</span>']
 const FIRST = { SPY:'1993-01-29', QQQ:'1999-03-10', IWM:'2000-05-26', DIA:'1998-01-20', EFA:'2001-08-17', EEM:'2003-04-14', TLT:'2002-07-30', IEF:'2002-07-30', GLD:'2004-11-18', VNQ:'2004-09-29', XLK:'1998-12-22', XLF:'1998-12-22', XLE:'1998-12-22', XLV:'1998-12-22', XLU:'1998-12-22' };
 $('#dr-univ').innerHTML = '<thead><tr><th>ETF</th><th>Class</th><th>First trading date</th></tr></thead><tbody>' + UNIV.map(t => `<tr><td class="tk">${t}</td><td class="hint">${['TLT','IEF'].includes(t) ? 'Bonds' : t === 'GLD' ? 'Gold' : 'Equity'}</td><td class="num">${FIRST[t]}</td></tr>`).join('') + '</tbody>';
 const st = s => ({done:'<span class="tag t-ok">Completed</span>', failed:'<span class="tag t-x">Failed</span>', cancelled:'<span class="tag t-n">Cancelled</span>', running:'<span class="tag t-i">Running</span>', queued:'<span class="tag t-w">Queued</span>'})[s];
-const RUNS = [['R-3014','SPY-GLD daily','running','Development','—'],['R-3012','SPY-TLT daily joint state','done','Development','—'],['R-3011','SPY-TLT, k = 2','done','Development','—'],['R-3009','SPY-TLT-GLD, k = 1','failed','Development','—'],['R-3004','SPY-TLT weekly','done','Development','—']];
+const RUNS = [['R-3014','SPY-GLD daily','running','Training','—'],['R-3012','SPY-TLT daily joint state','done','Training','—'],['R-3011','SPY-TLT, k = 2','done','Training','—'],['R-3009','SPY-TLT-GLD, k = 1','failed','Training','—'],['R-3004','SPY-TLT weekly','done','Training','—']];
 $('#dr-list').innerHTML = '<thead><tr><th>Run</th><th>Experiment</th><th>Configuration</th><th>Use</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + RUNS.map(r => `<tr><td class="num">${r[0]}</td><td>${r[1]}</td><td class="num hint">cfg-${r[0].slice(2)}a</td><td>${r[3]}</td><td>${st(r[2])}</td><td>${r[2] === 'done' ? '<button class="lnk" data-go="overview">Open</button> · <button class="lnk" data-go="builder">Clone</button>' : r[2] === 'failed' ? '<button class="lnk" data-go="jobs">Failure reason</button>' : '<button class="lnk" data-go="jobs">Status</button>'}</td></tr>`).join('') + '</tbody>';
 
 // ------------------------------------------------------------ SC-05
@@ -525,18 +567,18 @@ function drawQuality() {
   $('#mi-q').innerHTML = kv([['Contexts', '9 (m = 2, s = 3, k = 1)'], ['Minimum support', `<span class="num">${sorted[0]}</span>`], ['10th percentile', `<span class="num">${sorted[0]}</span>`], ['Median support', `<span class="num">${sorted[4]}</span>`], ['Contexts below n_min', '0 of 9'], ['Decisions in low-support contexts', '0.0%'], ['Decisions in unsupported contexts (back-off)', '0.0% · 0 back-off events'], ['Homogeneity across folds (χ², Should)', 'not rejected at 5%']]);
 }
 $('#mi-bss').innerHTML = '<thead><tr><th>Period</th><th class="r">BSS vs order-0</th><th class="r">95% interval</th><th class="r">BSS vs persistence</th><th>H1</th></tr></thead><tbody>' +
-  [['Fold 1 · 2013', 0.006, -0.004, 0.016, 0.071], ['Fold 3 · 2015', -0.002, -0.013, 0.009, 0.064], ['Fold 5 · 2017', 0.004, -0.006, 0.014, 0.069], ['Fold 7 · 2019', 0.003, -0.008, 0.013, 0.066], ['All development folds', 0.004, -0.002, 0.010, 0.068]]
+  [['Fold 1 · 2013', 0.006, -0.004, 0.016, 0.071], ['Fold 3 · 2015', -0.002, -0.013, 0.009, 0.064], ['Fold 5 · 2017', 0.004, -0.006, 0.014, 0.069], ['Fold 7 · 2019', 0.003, -0.008, 0.013, 0.066], ['All training folds', 0.004, -0.002, 0.010, 0.068]]
   .map(r => `<tr><td>${r[0]}</td><td class="r num">${r[1] >= 0 ? '+' : ''}${f(r[1],3)}</td><td class="r num">[${f(r[2],3)}, ${f(r[3],3)}]</td><td class="r num">+${f(r[4],3)}</td><td>${r[2] > 0 ? '<span class="tag t-ok">skill</span>' : '<span class="tag t-n">no demonstrated skill</span>'}</td></tr>`).join('') + '</tbody>';
 
 // ------------------------------------------------------------ SC-06
 function drawOpt() {
-  const cs = $('#op-case').value === 'main' ? COUNTS.LH : COUNTS.CASH, cap = Math.min(100, Math.max(1, +$('#op-cap').value || 70)) / 100, tau = Math.max(0, +$('#op-tau').value || 0);
-  const o = optimize(cs, cap, tau), M2 = m => `[ ${f(m[0][0],5)}  ${f(m[0][1],5)} ; ${f(m[1][0],5)}  ${f(m[1][1],5)} ]`;
-  $('#op-est').innerHTML = `n_c = <b>${o.nc}</b> · λ_c = n_c / (n_c + τ) = <b>${f(o.lam)}</b><br>μ_c (conditional) = (${f(o.mc.mu[0],5)}, ${f(o.mc.mu[1],5)})<br>μ̄ (order 0) = (${f(o.m0.mu[0],5)}, ${f(o.m0.mu[1],5)})<br>e_c = μ̃_c − r_f = <b>(${f(o.e[0],5)}, ${f(o.e[1],5)})</b><br>Σ̃_c = <b>${M2(o.S)}</b>`;
-  $('#op-port').innerHTML = o.d ? `direction d = <b>(${f(o.d[0])}, ${f(o.d[1])})</b><br>scale s = min(G, cap / max d) = <b>${f(o.s)}</b> · set by the <b>${o.why}</b><br>expected return ${f(o.E,4)}% · volatility ${f(o.sd,4)}% per session<br>Sharpe ${f(o.sr,4)} per session · ${f(o.sr*Math.sqrt(252),2)} annualized (display only)` : `No asset has a positive expected excess return.<br><b>Allocation: 100% cash.</b>`;
-  $('#op-w').innerHTML = '<thead><tr><th>Asset</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th></tr></thead><tbody>' + ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(o.w[i])}</td><td class="r num">${money(100000*o.w[i])}</td></tr>`).join('') + `<tr><td class="tk">Cash</td><td class="r num">${pct(o.cash)}</td><td class="r num">${money(100000*o.cash)}</td></tr></tbody>`;
+  const cs = $('#op-case').value === 'main' ? COUNTS.LH : COUNTS.CASH, cap = Math.min(100, Math.max(1, +$('#op-cap').value || 100)) / 100, tau = Math.max(0, +$('#op-tau').value || 0), mode = $('#op-mode').value, rb = Math.max(0, +$('#op-rb').value || 0) / 252;
+  const o = optimize(cs, { cap, tau, mode, rb }), M2 = m => `[ ${f(m[0][0],5)}  ${f(m[0][1],5)} ; ${f(m[1][0],5)}  ${f(m[1][1],5)} ]`;
+  $('#op-est').innerHTML = `n_c = <b>${o.nc}</b> · ${o.tau > 0 ? `optional shrinkage λ_c = n_c / (n_c + τ) = <b>${f(o.lam)}</b>` : 'no shrinkage (default)'}<br>μ_c (conditional) = (${f(o.mc.mu[0],5)}, ${f(o.mc.mu[1],5)})<br>μ̄ (order 0) = (${f(o.m0.mu[0],5)}, ${f(o.m0.mu[1],5)})<br>e_c = μ̃_c − r_f = <b>(${f(o.e[0],5)}, ${f(o.e[1],5)})</b><br>Σ̃_c = <b>${M2(o.S)}</b>`;
+  $('#op-port').innerHTML = o.d ? `${o.mode === 'ls' ? 'long-short · ' : ''}direction d = <b>(${f(o.d[0])}, ${f(o.d[1])})</b>${o.mode === 'ls' ? ' · Σ|d| = 1' : ''}<br>gross exposure ${pct(o.gross,1)}<br>scale s = min(G, cap / max d) = <b>${f(o.s)}</b> · set by the <b>${o.why}</b><br>expected return ${f(o.E,4)}% · volatility ${f(o.sd,4)}% per session<br>Sharpe ${f(o.sr,4)} per session · ${f(o.sr*Math.sqrt(252),2)} annualized (display only)` : `No ${o.mode === 'ls' ? 'long or short position' : 'asset'} has a positive expected excess return.<br><b>Allocation: 100% cash.</b>${o.mode === 'long' ? '<br>Try the long-short mode.' : ''}`;
+  $('#op-w').innerHTML = '<thead><tr><th>Asset</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th></tr></thead><tbody>' + ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(o.w[i])}</td><td class="r num">${money(100000*o.w[i])}</td></tr>`).join('') + `<tr><td class="tk">Cash${o.mode === 'ls' && o.w.some(x => x < 0) ? ' (incl. short collateral)' : ''}</td><td class="r num">${pct(o.cash)}</td><td class="r num">${money(100000*o.cash)}</td></tr></tbody>`;
 }
-['op-case','op-cap','op-tau'].forEach(id => $('#'+id).addEventListener('input', drawOpt));
+['op-case','op-cap','op-tau','op-mode','op-rb'].forEach(id => $('#'+id).addEventListener('input', drawOpt));
 
 // ------------------------------------------------------------ SC-07 (synthetic series)
 const BT = (() => { const r = mulberry32(84), n = 1762, s = { st:[], b1:[], b2:[], b3:[], b4:[], b5:[] };
@@ -571,8 +613,8 @@ function drawBacktest() {
   $('#bt-f').innerHTML = '<thead><tr><th>Fold</th><th>Training decisions</th><th>Purged</th><th>Test</th></tr></thead><tbody>' +
     [['1','2005-01-04 to 2012-12-27','2012-12-28, 2012-12-31','2013'],['2','2005-01-04 to 2013-12-27','2013-12-30, 2013-12-31','2014'],['3–6','expanding yearly','last two sessions','2015–2018'],['7','2005-01-04 to 2018-12-27','2018-12-28, 2018-12-31','2019']]
     .map(r => `<tr><td class="num">${r[0]}</td><td class="num">${r[1]}</td><td class="num hint">${r[2]}</td><td class="num">${r[3]}</td></tr>`).join('') + '</tbody>';
-  $('#bt-hold').innerHTML = `<p style="margin-bottom:8px"><span class="tag t-w">Locked — not evaluated</span> Configurations evaluated on development folds: <b class="num">12</b></p><button class="btn" type="button" id="bt-fin">Finalize configuration cfg-3012a…</button><p class="hint" id="bt-finmsg" style="margin-top:6px"></p>`;
-  $('#bt-fin').onclick = e => { if (e.target.dataset.armed !== '1') { e.target.dataset.armed = '1'; e.target.textContent = 'Confirm: record hash and count, then evaluate 2020–2025 once'; return; } e.target.disabled = true; $('#bt-finmsg').textContent = 'Finalized: configuration hash and the count of 12 configurations recorded. The holdout run is queued (synthetic demo).'; };
+  $('#bt-hold').innerHTML = `<p style="margin-bottom:8px"><span class="tag t-w">Locked — not evaluated</span> Configurations evaluated on training folds: <b class="num">12</b></p><button class="btn" type="button" id="bt-fin">Finalize configuration cfg-3012a…</button><p class="hint" id="bt-finmsg" style="margin-top:6px"></p>`;
+  $('#bt-fin').onclick = e => { if (e.target.dataset.armed !== '1') { e.target.dataset.armed = '1'; e.target.textContent = 'Confirm: record hash and count, then evaluate the holdout once'; return; } e.target.disabled = true; $('#bt-finmsg').textContent = 'Finalized: configuration hash and the count of 12 configurations recorded. The holdout run is queued (synthetic demo).'; };
 }
 
 // ------------------------------------------------------------ SC-08
@@ -592,9 +634,9 @@ $('#jobs-refresh').onclick = () => { const t = new Date().toISOString().slice(11
 // ------------------------------------------------------------ review pages
 const lvl = v => `<span class="tag ${v === 'Critical' ? 't-x' : v === 'High' ? 't-w' : 't-n'}">${v}</span>`;
 $('#rk').innerHTML = '<thead><tr><th>ID</th><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Owner</th></tr></thead><tbody>' + [['R-01','Data leakage into training or estimates','Medium','Critical','Aseel'],['R-02','Sparse joint states','High','High','Seba'],['R-03','Overfitting and multiple testing','High','High','Aseel'],['R-04','Non-stationary transition probabilities','High','High','Seba'],['R-05','Unrealistic execution assumptions','Medium','Critical','Seba'],['R-06','Weak predictive value','High','High','Aseel'],['R-07','Survivorship and universe selection bias','Medium','High','Seba'],['R-08','Unstable conditional moments and weights','Medium','High','Aseel'],['R-09','Data provider quality and terms','Medium','High','Seba'],['R-10','Results misread as investment advice','Medium','High','Aseel'],['R-11','Scope and integration delays','High','High','Baraa'],['R-12','Schedule slippage or unavailable member','Medium','High','All'],['R-13','Exposure of another user’s data','Medium','High','Baraa'],['R-14','Resource exhaustion by heavy runs','Medium','Medium','Baraa'],['R-15','Vulnerable dependency','Low','High','Baraa'],['R-16','Prototype numbers mistaken for results','Medium','High','Baraa']].map(r => `<tr><td class="num">${r[0]}</td><td>${r[1]}</td><td>${lvl(r[2])}</td><td>${lvl(r[3])}</td><td class="hint">${r[4]}</td></tr>`).join('') + '</tbody>';
-$('#ng').innerHTML = '<tbody>' + [['NG-01','Brokerage services and real orders'],['NG-02','Intraday data'],['NG-03','Performance guarantees'],['NG-04','Stocks, options, futures, cryptocurrencies'],['NG-05','Personal advice'],['NG-06','Native mobile applications'],['NG-07','Social and commercial features'],['NG-08','Fundamental and sentiment analysis'],['NG-09','Automated real-world execution'],['NG-10','Unbounded configurations'],['NG-11','Long-Short simulation in this version'],['NG-12','Production hardening']].map(n => `<tr><td class="num" style="width:70px">${n[0]}</td><td>${n[1]}</td></tr>`).join('') + '</tbody>';
+$('#ng').innerHTML = '<tbody>' + [['NG-01','Brokerage services and real orders'],['NG-02','Intraday data'],['NG-03','Performance guarantees'],['NG-04','Stocks, options, futures, cryptocurrencies'],['NG-05','Personal advice'],['NG-06','Native mobile applications'],['NG-07','Copy trading, marketplaces, billing (sharing only for saved studies)'],['NG-08','Fundamental and sentiment analysis'],['NG-09','Automated real-world execution'],['NG-10','Unbounded configurations'],['NG-11','Additional forecasting models; state information other than returns'],['NG-12','Production hardening']].map(n => `<tr><td class="num" style="width:70px">${n[0]}</td><td>${n[1]}</td></tr>`).join('') + '</tbody>';
 const sTag = s => s.startsWith('Closed') ? 't-ok' : s === 'Open' ? 't-w' : 't-n';
-$('#oi').innerHTML = '<thead><tr><th>ID</th><th>Topic</th><th>Status</th><th>Owner</th><th>Target</th></tr></thead><tbody>' + [['OI-01','Long-Short mode','Deferred','Aseel','Beta, 4 Jun 2027'],['OI-02','Universe, history, return convention','Closed — proposed','Seba','27 Nov 2026'],['OI-03','Categories, order, smoothing, support','Closed — proposed','Seba','27 Nov 2026'],['OI-04','Classifier and calibration','Deferred','Aseel','Alpha, 26 Mar 2027'],['OI-05','Scoring and allocation method','Closed — proposed','Aseel','27 Nov 2026'],['OI-06','Walk-forward windows','Closed — proposed','Baraa','27 Nov 2026'],['OI-07','Execution, costs, benchmark','Closed — proposed','Seba','27 Nov 2026'],['OI-08','Technology stack','Closed','Baraa','SDD, 22 Jan 2027'],['OI-09','Account policy','Closed','Baraa','27 Nov 2026'],['OI-10','Export schema and retention','Open','Baraa','SDD, 22 Jan 2027'],['OI-11','Performance targets','Open','Baraa','Alpha, 26 Mar 2027'],['OI-12','Screen design sign-off','Open','All','27 Nov 2026'],['OI-13','Data provider terms','Open','Seba','M1, 25 Dec 2026'],['OI-14','Security scope','Closed','Baraa','27 Nov 2026']].map(o => `<tr><td class="num">${o[0]}</td><td>${o[1]}</td><td><span class="tag ${sTag(o[2])}">${o[2]}</span></td><td class="hint">${o[3]}</td><td class="num hint">${o[4]}</td></tr>`).join('') + '</tbody>';
+$('#oi').innerHTML = '<thead><tr><th>ID</th><th>Topic</th><th>Status</th><th>Owner</th><th>Target</th></tr></thead><tbody>' + [['OI-01','Long-short mode','Closed — proposed','Aseel','27 Nov 2026'],['OI-02','Universe, history, return convention','Closed — proposed','Seba','27 Nov 2026'],['OI-03','Categories, order, estimation, support','Closed — proposed','Seba','27 Nov 2026'],['OI-04','Classifier and calibration','Removed','—','—'],['OI-05','Scoring and allocation method','Closed — proposed','Aseel','27 Nov 2026'],['OI-06','Walk-forward windows','Closed — proposed','Baraa','27 Nov 2026'],['OI-07','Execution, costs, benchmark','Closed — proposed','Seba','27 Nov 2026'],['OI-08','Technology stack','Closed','Baraa','SDD, 22 Jan 2027'],['OI-09','Account policy','Closed','Baraa','27 Nov 2026'],['OI-10','Export schema and retention','Open','Baraa','SDD, 22 Jan 2027'],['OI-11','Performance targets','Open','Baraa','Alpha, 26 Mar 2027'],['OI-12','Screen design sign-off','Open','All','27 Nov 2026'],['OI-13','Data provider terms','Open','Seba','M1, 25 Dec 2026'],['OI-14','Security scope','Closed','Baraa','27 Nov 2026'],['OI-15','State merging','Deferred','Seba','After Beta, Jun 2027']].map(o => `<tr><td class="num">${o[0]}</td><td>${o[1]}</td><td><span class="tag ${sTag(o[2])}">${o[2]}</span></td><td class="hint">${o[3]}</td><td class="num hint">${o[4]}</td></tr>`).join('') + '</tbody>';
 
 // ------------------------------------------------------------ init
 drawOverview(); validate(); drawTrans(); drawQuality(); drawOpt(); drawJobs();
