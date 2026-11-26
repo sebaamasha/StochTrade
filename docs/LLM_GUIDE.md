@@ -4,7 +4,7 @@ This file explains the StochTrade final project in a few pages, so that an AI as
 
 Shenkar College, Software Engineering, final project 2026–2027.
 Students: Baraa Haj, Seba Amasha, Aseel Abu Saleh.
-Supervisors: Dr. Dvir Ross (research and mathematics), Dr. Marcelo Sihman (software engineering).
+Supervisors: Dr. Dvir Ross, Dr. Marcelo Sihman.
 
 ## 1. The question in one paragraph
 
