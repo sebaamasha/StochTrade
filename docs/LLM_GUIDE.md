@@ -1,6 +1,6 @@
 # StochTrade: guide for AI assistants and readers
 
-This file explains the StochTrade final project in a few pages, so that an AI assistant (or a person in a hurry) can understand it without reading the full 61-page SRS. Paste it at the start of a conversation together with the question you want answered. Section numbers below refer to the SRS in `docs/`.
+This file explains the StochTrade final project in a few pages, so that an AI assistant (or a person in a hurry) can understand it without reading the full 59-page SRS. Paste it at the start of a conversation together with the question you want answered. Section numbers below refer to the SRS in `docs/`.
 
 Shenkar College, Software Engineering, final project 2026–2027.
 Students: Baraa Haj, Seba Amasha, Aseel Abu Saleh.
@@ -19,12 +19,12 @@ We take a small group of ETFs, for example SPY (US stocks) and TLT (long US Trea
 | Joint state | The categories of all m assets in one period. With m = 2 and s = 3 there are 9 joint states (LL, LM, …, HH; first letter SPY, second TLT). |
 | Order k, context | The context is the last k joint states. Default k = 1, so the context is just the current joint state. |
 | Support, n_c | How many training transitions start from context c. |
-| Insufficient context | A context with n_c below n_min (default 100). By default the system holds cash there. |
+| Support classes | Supported: n_c ≥ n_min (default 100). Low support: n_floor ≤ n_c < n_min (n_floor default 30); used, but the decision is flagged. Unsupported: n_c < n_floor; the system backs off to the shorter context of order k − 1, and finally to order 0. |
 | p(j \| c) | Probability of next state j given context c: the observed count divided by n_c. No smoothing by default. |
-| Representative return r_j | Typical holding return of each asset in periods whose state was j (mean by default; median, pseudo-mode, or trimmed mean as options). |
+| Representative return r_j | Typical holding return of each asset in periods whose state was j (mean by default; median or pseudo-mode as options). |
 | μ_c, Σ_c | Conditional expected return vector and covariance matrix: μ_c = ∑_j p(j\|c) r_j, Σ_c = ∑_j p(j\|c)(r_j − μ_c)(r_j − μ_c)^T. Note that ∑ with an index is a sum, while Σ_c is a matrix. |
 | Maximum-Sharpe portfolio | Weights that maximize expected excess return divided by standard deviation. Long-only by default; long-short is an option. If no asset has a positive expected return, the portfolio is 100% cash. |
-| Walk-forward | The model is re-estimated each year on all earlier data and tested on the following year, as if in real time. |
+| Walk-forward | The model is estimated on all earlier data (expanding window) and tested on the following year, one year at a time, as if in real time. |
 | Holdout | A final test period (default 2020–2025) that is evaluated once, only after the configuration is frozen. |
 | Configuration count | How many configurations were tried before the holdout was opened. A high count means the best result may be luck. |
 
@@ -33,10 +33,10 @@ We take a small group of ETFs, for example SPY (US stocks) and TLT (long US Trea
 1. Data: daily prices for the chosen ETFs from a fixed data snapshot (FR-03, FR-04).
 2. Returns and states: open-to-open returns define the categories; the return actually earned depends on the entry scenario, open-to-open (default) or open-to-close (FR-05).
 3. Counting: transitions from each context to each next state in the training data (FR-06).
-4. Support check: contexts below n_min follow the insufficient-context policy (FR-07).
+4. Support check: low-support contexts are flagged, and unsupported contexts back off to order k − 1, then order 0 (FR-07).
 5. Estimates: μ_c and Σ_c from the probabilities and the representative returns (FR-08).
 6. Optimization: maximum-Sharpe weights, scaled to the gross exposure limit G and an optional cap (FR-09).
-7. Execution: the decision is made at the open, from the period that ended at that open, and the trade is filled at that opening price plus slippage, with commissions (FR-05, FR-10).
+7. Execution: the decision is made at the close of session t and the trade is filled at the unadjusted open of session t + 1, with transaction costs and fractional shares (FR-10).
 8. Evaluation: walk-forward folds, baselines, confidence intervals, hypotheses H1–H5 (FR-11 to FR-13).
 
 ## 4. The worked example (SRS 3.5)
@@ -56,11 +56,11 @@ This example is also the automated test for FR-06 to FR-10, so its numbers are e
 * Forecast skill: Brier skill score against the order-0 distribution.
 * Uncertainty: block-bootstrap 95% confidence intervals. A difference whose interval includes zero is not evidence.
 * Hypotheses H1–H5 are fixed in advance. H5 is a control: the placebo must show no skill, otherwise there is a leak.
-* No look-ahead anywhere: category boundaries, counts, and estimates use training data only, and every chart on a time axis uses only data available at each date (FR-25).
+* No look-ahead anywhere: category boundaries, counts, and estimates use training data only, and every chart on a time axis uses only data available at each date (FR-23).
 
 ## 6. The platform (SRS Chapter 7)
 
-A web application (React front end, FastAPI back end, PostgreSQL, background jobs with RQ). Screens: sign-in, overview, strategy builder with a feasibility preview, data and runs, model insights (with the interactive Markov chain, where the researcher can merge two states by dragging one onto the other, FR-26), optimization explorer, backtest lab, and job status. All charts are interactive and drawn with Plotly.js. Every performance view says "Simulated research output, not investment advice".
+A web application (React front end, FastAPI back end, PostgreSQL, background jobs with RQ). Screens: sign-in, overview, strategy builder with a feasibility preview, data and runs, model insights (with the interactive Markov chain, where the researcher can merge two states by dragging one onto the other, FR-24), optimization explorer, backtest lab, and job status. All charts are interactive and drawn with Plotly.js. Every performance view says "Simulated research output, not investment advice".
 
 The prototype (`prototype/stochtrade_prototype.html`) shows layout and behaviour only. **All numbers in the prototype are synthetic and must never be quoted as results.**
 
@@ -81,9 +81,9 @@ Out of scope (SRS Chapter 8): real trading, intraday data, individual stocks or 
 | How much data each configuration needs | 2.6 |
 | Technology choices | 2.7 |
 | Who does what, schedule | 2.8, 2.9 |
-| All requirements with acceptance tests | Chapter 3 (FR-01 to FR-26) |
+| All requirements with acceptance tests | Chapter 3 (FR-01 to FR-24) |
 | Worked example | 3.5 |
-| Interactive visualization and state merging | 3.9 (FR-23 to FR-26) |
+| Interactive visualization and state merging | 3.9 (FR-21 to FR-24) |
 | Quality targets and security | Chapter 4 |
 | Risks | Chapter 6 |
 | Open issues | Chapter 9 |
