@@ -6,7 +6,7 @@ Final project, B.Sc. in Software Engineering, Shenkar College, Faculty of Engine
 | | |
 |---|---|
 | Team | Seba Amasha ([@sebaamasha](https://github.com/sebaamasha)) · Baraa Haj ([@Baraa40](https://github.com/Baraa40)) · Aseel Abu Saleh |
-| Supervisors | Dr. Dvir Ross (research direction) · Dr. Marcelo Sihman (software engineering) |
+| Supervisors | Dr. Dvir Ross · Dr. Marcelo Sihman |
 | Current stage | Software Requirements Specification (November 2026) |
 
 ## What the project does
@@ -25,7 +25,7 @@ Predictability is treated as a hypothesis to test; negative results are reported
 
 | Document | File |
 |---|---|
-| Software Requirements Specification (SRS) v3.1 | [`docs/StochTrade_SRS.pdf`](docs/StochTrade_SRS.pdf) · Word source [`docs/StochTrade_SRS.docx`](docs/StochTrade_SRS.docx) |
+| Software Requirements Specification (SRS) | [`docs/StochTrade_SRS_3.pdf`](docs/StochTrade_SRS_3.pdf) |
 | Guide for AI assistants and readers | [`docs/LLM_GUIDE.md`](docs/LLM_GUIDE.md) — paste it into an AI assistant to explain the project |
 | Software Design Document (SDD) | due 22 January 2027 |
 
@@ -35,7 +35,7 @@ Predictability is treated as a hypothesis to test; negative results are reported
 - **Open offline:** download [`prototype/stochtrade_prototype.html`](prototype/stochtrade_prototype.html) and double-click it. It is a single file with no server; the chart library (Plotly.js 2.35.2) is embedded.
 - **All numbers in the prototype are synthetic.** They illustrate layout and behaviour only and must not be cited as results.
 
-Screens: Overview (SC-02), Strategy builder with feasibility heatmap and draggable category thresholds (SC-03), Data and runs with saved studies (SC-04), Model insights with the **interactive Markov chain** — click a state to see its distribution, weights, and an explanation — plus the transition heatmap, state timeline, and chain quality (SC-05), Optimization explorer with the efficient frontier (SC-06), Backtest lab with equity, drawdown, rolling Sharpe, and the hypotheses forest plot (SC-07), and Job status (SC-08). Every chart is interactive, and every time-axis chart is computed point-in-time (SRS FR-23 to FR-26); in the Markov chain view, drag one state onto another to merge them and compare the merged chain with the original.
+Screens: Overview (SC-02), Strategy builder with feasibility heatmap and draggable category thresholds (SC-03), Data and runs with saved studies (SC-04), Model insights with the **interactive Markov chain** — click a state to see its distribution, weights, and an explanation — plus the transition heatmap, state timeline, and chain quality (SC-05), Optimization explorer with the efficient frontier (SC-06), Backtest lab with equity, drawdown, rolling Sharpe, and the hypotheses forest plot (SC-07), and Job status (SC-08). Every chart is interactive, and every time-axis chart is computed point-in-time (SRS FR-21 to FR-24); in the Markov chain view, drag one state onto another to merge them and compare the merged chain with the original.
 
 ## Repository structure
 
