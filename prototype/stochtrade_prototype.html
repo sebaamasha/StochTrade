@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>StochTrade — SRS v3.1 screen prototype (synthetic data)</title>
+<title>StochTrade — SRS screen prototype (synthetic data)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -227,7 +227,7 @@ math{font-size:1.05em}
 <div class="wm" aria-hidden="true" id="wm">SYNTHETIC DATA — NOT RESULTS</div>
 <div class="shell">
   <nav class="rail" aria-label="Main navigation">
-    <div class="brand"><div class="mark" aria-hidden="true">ST</div><div class="t"><b>StochTrade</b><small>SRS v3.1 prototype</small></div></div>
+    <div class="brand"><div class="mark" aria-hidden="true">ST</div><div class="t"><b>StochTrade</b><small>SRS prototype</small></div></div>
     <div class="navgrp" id="nav-product"><h2>Workspace</h2></div>
     <div class="navgrp appendix" id="nav-appendix"><h2>SRS review pages<small>Not product navigation</small></h2></div>
     <div class="me"><div class="av" aria-hidden="true">BH</div><div class="who">Baraa Haj<small>Researcher workspace</small></div><button class="out" type="button" data-go="signin">Sign out</button></div>
@@ -290,9 +290,9 @@ math{font-size:1.05em}
             <div class="field"><label for="sb-s">Categories per asset s</label><div><input type="range" id="sb-s" min="2" max="5" value="3" style="width:140px"> <span class="num" id="sb-sv">3</span></div></div>
             <div class="field"><label for="sb-k">Markov order k</label><div><input type="range" id="sb-k" min="1" max="10" value="1" style="width:140px"> <span class="num" id="sb-kv">1</span></div></div>
             <div class="field"><span class="fl">Category boundaries</span><div><div class="seg" id="sb-bnd"></div><input class="in num" id="sb-thr" value="-1.5, -0.5, 0.5, 1.5" style="margin-top:6px;display:none" aria-label="Fixed thresholds in percent"></div></div>
-            <div class="field"><label for="sb-nmin">Minimum transitions n_min</label><input class="in num" id="sb-nmin" value="100"></div>
-            <div class="field"><label for="sb-pol">Insufficient context</label><select class="in" id="sb-pol"><option>Hold cash</option><option>Keep previous weights</option><option>Back off to order k − 1</option></select></div>
-            <div class="field"><label for="sb-est">Representative return</label><select class="in" id="sb-est"><option>Mean</option><option>Median</option><option>Pseudo-mode</option><option>Trimmed mean</option></select></div>
+            <div class="field"><label for="sb-nmin">Minimum transitions <i>n</i><sub>min</sub></label><input class="in num" id="sb-nmin" value="100"></div>
+            <div class="field"><label for="sb-pol">Unsupported context</label><select class="in" id="sb-pol"><option>Back off to order k − 1, then order 0</option></select></div>
+            <div class="field"><label for="sb-est">Representative return</label><select class="in" id="sb-est"><option>Mean</option><option>Median</option><option>Pseudo-mode</option></select></div>
             <div class="field"><span class="fl">Smoothing α / shrinkage τ (optional)</span><div style="display:flex;gap:6px"><input class="in num" id="sb-alpha" value="0" style="width:70px" aria-label="Smoothing alpha, 0 is off"><input class="in num" id="sb-tau" value="0" style="width:70px" aria-label="Shrinkage tau, 0 is off"></div></div>
           </div>
           <div class="grp"><h4>Allocation</h4>
@@ -314,7 +314,7 @@ math{font-size:1.05em}
         <div>
           <div class="card" style="margin-bottom:12px"><h3>Feasibility preview <small>FR-02, FR-07</small></h3><div class="mono-box" id="sb-feas"></div></div>
           <div class="card" style="margin-bottom:12px"><h3>Partition preview <small>actual counts · synthetic data in this prototype</small></h3><div id="sb-part"></div></div>
-          <div class="card" style="margin-bottom:12px"><h3>Feasibility heatmap <small>transitions per context for k × s · ✕ = below n_min</small></h3><div id="sb-heat"></div></div>
+          <div class="card" style="margin-bottom:12px"><h3>Feasibility heatmap <small>transitions per context for k × s · ✕ = below <i>n</i><sub>min</sub></small></h3><div id="sb-heat"></div></div>
           <div class="card" style="margin-bottom:12px"><h3>Return histogram and category boundaries <small>drag a red line to set a fixed threshold</small></h3><div id="sb-hist"></div><div id="sb-histc"></div></div>
           <div class="card"><h3>Validation</h3><ul class="vlist" id="sb-val"></ul></div>
         </div>
@@ -328,7 +328,7 @@ math{font-size:1.05em}
         <div class="card"><h3>Snapshot <small>FR-03</small></h3><table id="dr-meta"></table></div>
         <div class="card"><h3>Universe coverage <small>fixed rule: trading since 31 Dec 2004</small></h3><div class="scroll"><table id="dr-univ"></table></div></div>
       </div></div>
-      <div id="dr-st" hidden><div class="card"><h3>Saved studies <small>immutable, versioned · private unless shared (FR-21, FR-22)</small></h3><div class="scroll"><table id="dr-stt"></table></div></div></div>
+      <div id="dr-st" hidden><div class="card"><h3>Saved studies <small>immutable, versioned · private unless shared (FR-20)</small></h3><div class="scroll"><table id="dr-stt"></table></div></div></div>
       <div id="dr-runs" hidden><div class="card"><h3>My runs <small>only runs you own are listed</small></h3><div class="scroll"><table id="dr-list"></table></div></div></div>
     </section>
 
@@ -337,7 +337,7 @@ math{font-size:1.05em}
       <div class="tabs" role="tablist" id="mi-tabs"></div>
       <div id="mi-chain">
         <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <b style="font-size:13px">State merging (FR-26)</b><span class="hint">Mode</span><div class="seg" id="mc-mode"></div>
+          <b style="font-size:13px">State merging (FR-24)</b><span class="hint">Mode</span><div class="seg" id="mc-mode"></div>
           <button class="btn" type="button" id="mc-undo">Undo last merge</button><button class="btn" type="button" id="mc-reset">Undo all</button>
           <span class="hint">Configuration count: <b class="num" id="mc-cfg">12</b> (every viewed mapping counts, FR-11)</span></div>
           <div style="margin-top:8px">Merges: <span id="mc-merges"></span></div>
@@ -348,17 +348,17 @@ math{font-size:1.05em}
           <div class="card"><h3 id="mc-title">Markov chain</h3>
             <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px"><label class="hint" for="mc-min">Hide arrows below</label><input type="range" id="mc-min" min="0" max="15" value="0" style="width:140px"><span class="num" id="mc-minv">0%</span></div>
             <div id="mc-plot" style="touch-action:none;cursor:grab"></div></div>
-          <div class="card"><h3>Decision in the selected state <small>FR-23 · generated from the estimates</small></h3><div id="mc-panel"></div></div>
+          <div class="card"><h3>Decision in the selected state <small>FR-21 · generated from the estimates</small></h3><div id="mc-panel"></div></div>
         </div>
         <div class="card" id="mc-cmpcard" hidden><h3>Original and merged chain, context by context <small>support, weights, and χ² test of every affected context</small></h3><div class="scroll"><table id="mc-cmp"></table></div></div>
-        <div class="card"><h3>State timeline <small>joint state of every session · computed point-in-time: boundaries use earlier sessions only (FR-25)</small></h3><div id="mc-time"></div></div>
+        <div class="card"><h3>State timeline <small>joint state of every session · computed point-in-time: boundaries use earlier sessions only (FR-23)</small></h3><div id="mc-time"></div></div>
         <div id="mc-ghost" hidden style="position:fixed;z-index:60;pointer-events:none;background:#1F3864;color:#fff;font-size:12px;padding:4px 8px;border-radius:6px"></div>
       </div>
       <div id="mi-trans" hidden>
         <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="hint" for="mi-ctx">Context (last joint state)</label><select class="in" id="mi-ctx" style="max-width:220px"></select><span id="mi-ctxinfo"></span></div></div>
         <div class="card"><h3>Next-state distribution <small>SPY + TLT · s = 3 · k = 1 · empirical frequencies · rows sum to 1</small></h3><div class="scroll"><table id="mi-table"></table></div>
-          <div style="display:flex;gap:10px;align-items:center;margin:14px 0 4px"><b style="font-size:13px">Transition-matrix heatmap</b><label class="hint" for="mh-min">hide contexts with n_c below</label><input type="range" id="mh-min" min="0" max="600" step="10" value="0" style="width:160px"><span class="num" id="mh-minv">0</span></div><div id="mh-plot"></div>
-          <p class="hint" style="margin-top:8px">p(j | c) = n_c,j / n_c. Contexts with fewer than n_min = 100 transitions are not used for decisions; the χ² test shows whether the context changes the distribution at all.</p></div>
+          <div style="display:flex;gap:10px;align-items:center;margin:14px 0 4px"><b style="font-size:13px">Transition-matrix heatmap</b><label class="hint" for="mh-min">hide contexts with <i>n</i><sub>c</sub> below</label><input type="range" id="mh-min" min="0" max="600" step="10" value="0" style="width:160px"><span class="num" id="mh-minv">0</span></div><div id="mh-plot"></div>
+          <p class="hint" style="margin-top:8px">p(j | c) = <i>n</i><sub>c,j</sub> / <i>n</i><sub>c</sub>. Contexts with fewer than <i>n</i><sub>min</sub> = 100 transitions are not used for decisions; the χ² test shows whether the context changes the distribution at all.</p></div>
       </div>
       <div id="mi-quality" hidden><div class="grid g2">
         <div class="card"><h3>Support by context <small>training transitions per context, fold 7</small></h3><div id="mi-bars"></div></div>
@@ -387,7 +387,7 @@ math{font-size:1.05em}
     <!-- SC-07 -->
     <section class="view" id="v-backtest" hidden aria-label="Backtest lab">
       <div class="card" style="margin-bottom:12px"><h3>Equity curves and drawdown <small>training-period folds 2013–2019 · click a date to open its decision · toggle series in the legend · synthetic</small></h3><div id="bt-eq"></div><div id="bt-pick" style="margin-top:6px"></div></div>
-      <div class="card" style="margin-bottom:12px"><h3>Rolling Sharpe ratio <small>trailing window · computed point-in-time (FR-25)</small></h3><div class="seg" id="bt-rsw" style="margin-bottom:6px"></div><div id="bt-roll"></div></div>
+      <div class="card" style="margin-bottom:12px"><h3>Rolling Sharpe ratio <small>trailing window · computed point-in-time (FR-23)</small></h3><div class="seg" id="bt-rsw" style="margin-bottom:6px"></div><div id="bt-roll"></div></div>
       <div class="grid g2">
         <div class="card"><h3>Metrics with 95% intervals</h3><div class="scroll"><table id="bt-m"></table></div></div>
         <div class="card"><h3>Hypotheses report <small>pre-registered, Table 5 of the SRS</small></h3><div class="scroll"><table id="bt-h"></table></div><div id="bt-forest" style="margin-top:8px"></div></div>
@@ -395,7 +395,7 @@ math{font-size:1.05em}
       <div class="grid g2">
         <div class="card"><h3>Folds <small>purged decisions shown</small></h3><div class="scroll"><table id="bt-f"></table></div></div>
         <div class="card"><h3>Holdout 2020–2025 <small>FR-11</small></h3><div id="bt-hold"></div>
-          <h3 style="margin-top:12px">Assumptions</h3><div class="mono-box">Decision at close, fill at next unadjusted open · 5 bps fees + 5 bps slippage · band 2 points · benchmark SPY · simple open-to-open returns · r_f = 0 · annualization √252</div></div>
+          <h3 style="margin-top:12px">Assumptions</h3><div class="mono-box">Decision at close, fill at next unadjusted open · 5 bps fees + 5 bps slippage · band 2 points · benchmark SPY · simple open-to-open returns · <i>r</i><sub>f</sub> = 0 · annualization √252</div></div>
       </div>
     </section>
 
@@ -428,8 +428,8 @@ const PI = [0.09,0.10,0.14,0.11,0.12,0.11,0.14,0.11,0.08];
 const RS = { L:-0.95, M:0.05, H:0.98 }, RT = { L:-0.62, M:0.01, H:0.63 };
 const R = J.map(j => [RS[j[0]], RT[j[1]]]);
 const COUNTS = {
-  LH: [34,40,62,44,50,48,62,46,34],                     // worked example (n_c = 420)
-  CASH: [70,50,30,60,50,30,50,45,35],                   // cash case (n_c = 420)
+  LH: [34,40,62,44,50,48,62,46,34],                     // worked example (<i>n</i><sub>c</sub> = 420)
+  CASH: [70,50,30,60,50,30,50,45,35],                   // cash case (<i>n</i><sub>c</sub> = 420)
 };
 // synthetic counts for the other contexts of the transition table
 (function(){ const r = mulberry32(31); J.forEach(c => { if (c === 'LH') return; const tot = Math.round(460 + r() * 260); const w = PI.map(p => p * (0.75 + 0.5 * r())); const sw = w.reduce((a,b)=>a+b,0); const cnt = w.map(x => Math.floor(tot * x / sw)); cnt[4] += tot - cnt.reduce((a,b)=>a+b,0); COUNTS[c] = cnt; }); })();
@@ -466,7 +466,8 @@ function optimize(n, o = {}) {
   const longX = Math.max(w[0],0) + Math.max(w[1],0), shortX = Math.max(-w[0],0) + Math.max(-w[1],0);
   return { nc, p, mc, m0, lam, mu, S, e, d, s, w, cash: 1 - longX, longX, shortX, why, E, sd, sr: sd > 0 ? E / sd : null };
 }
-const SUPPORT = n => n >= 100 ? ['supported','t-ok'] : ['insufficient: policy applies','t-x'];
+const SUPPORT = n => n >= 100 ? ['supported','t-ok'] : n >= 30 ? ['low support: flagged','t-w'] : ['unsupported: back-off','t-x'];
+const SUPCLS = n => n >= 100 ? 'supported' : n >= 30 ? 'low support, flagged' : 'unsupported → back-off to order 0';
 function chi2(n, PP = PI) { const nc = n.reduce((a,b)=>a+b,0); return n.reduce((s,x,i) => s + (x - nc*PP[i])**2 / (nc*PP[i]), 0); }
 function chi2p(x, df) { const z = (Math.pow(x/df, 1/3) - (1 - 2/(9*df))) / Math.sqrt(2/(9*df)); const t = 1/(1+0.2316419*Math.abs(z)); const nd = Math.exp(-z*z/2)/Math.sqrt(2*Math.PI)*t*(0.31938153+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429)))); return z > 0 ? nd : 1 - nd; }
 
@@ -514,7 +515,7 @@ $('#do-reg').onclick = () => { const m = $('#reg-err'); let msg = ''; if (!$('#r
 const MAIN = optimize(COUNTS.LH);
 function drawOverview() {
   const sp = SUPPORT(MAIN.nc);
-  $('#ov-kpis').innerHTML = kpi('Current context', 'SPY low · TLT high', `n_c = ${MAIN.nc} · <span class="tag ${sp[1]}">${sp[0]}</span>`) +
+  $('#ov-kpis').innerHTML = kpi('Current context', 'SPY low · TLT high', `<i>n</i><sub>c</sub> = ${MAIN.nc} · <span class="tag ${sp[1]}">${sp[0]}</span>`) +
     kpi('Expected excess return', f(MAIN.E, 4) + '%', 'per session, before costs') + kpi('Expected volatility', f(MAIN.sd, 3) + '%', 'per session') + kpi('Cash', pct(MAIN.cash, 1), 'no cap binding');
   $('#ov-w').innerHTML = '<thead><tr><th>ETF</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th><th class="r">Expected excess return</th></tr></thead><tbody>' +
     ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(MAIN.w[i])}</td><td class="r num">${money(100000*MAIN.w[i])}</td><td class="r num">${f(MAIN.mu[i],5)}%</td></tr>`).join('') +
@@ -551,25 +552,25 @@ function validate() {
   const sess = Math.round(5290 / Math.max(1, P)), ctx = Math.pow(s, m * k), nxt = Math.pow(s, m), per = sess / ctx, cell = per / nxt;
   $('#sb-scnq').textContent = SCNQ[SB.scn];
   $('#sb-feas').innerHTML = `group m = <b>${m}</b> · s = <b>${s}</b> · k = <b>${k}</b> · P = <b>${P}</b><br>contexts s<sup>m·k</sup> = <b>${ctx.toLocaleString()}</b> · next states s<sup>m</sup> = <b>${nxt}</b><br>periods in history ≈ <b>${sess.toLocaleString()}</b><br>transitions per context ≈ <b>${per.toFixed(1)}</b> · per cell ≈ <b>${cell.toFixed(2)}</b>` +
-    (per < nmin ? `<br><span class="dn">Warning: below n_min = ${nmin} on average. Use fewer categories, a lower order, or a shorter period.</span>` : `<br><span class="up">Average above n_min.</span>`);
+    (per < nmin ? `<br><span class="dn">Warning: below <i>n</i><sub>min</sub> = ${nmin} on average. Use fewer categories, a lower order, or a shorter period.</span>` : `<br><span class="up">Average above <i>n</i><sub>min</sub>.</span>`);
   const thr = $('#sb-thr').value.split(',').map(x => +x).filter(x => isFinite(x));
   if (m >= 2 && m <= 4 && ctx <= 1000000 && P >= 1 && P <= 63) {
     const pt = partition(m, s, k, P, SB.bnd, thr);
     const recs = []; for (const s2 of [2,3,4]) for (const k2 of [1,2,3]) { if (Math.pow(s2, m*k2) > 4096) continue; const q = partition(m, s2, k2, P, 'q', thr); if (q.min >= nmin) recs.push(`s = ${s2}, k = ${k2} (min ${q.min})`); }
-    $('#sb-part').innerHTML = `<table><tbody><tr><td class="hint">Joint states observed</td><td class="num">${pt.occ.size} of ${nxt}</td></tr><tr><td class="hint">Transitions per context: minimum / median</td><td class="num">${pt.min} / ${pt.med}</td></tr><tr><td class="hint">Contexts below n_min</td><td class="num">${pt.below} of ${Math.min(pt.nCtx, 5000).toLocaleString()}</td></tr><tr><td class="hint">Recommended (quantiles, every context ≥ n_min)</td><td style="font-size:12px">${recs.slice(-4).reverse().join('<br>') || 'none — use fewer assets or a shorter period'}</td></tr></tbody></table>`;
+    $('#sb-part').innerHTML = `<table><tbody><tr><td class="hint">Joint states observed</td><td class="num">${pt.occ.size} of ${nxt}</td></tr><tr><td class="hint">Transitions per context: minimum / median</td><td class="num">${pt.min} / ${pt.med}</td></tr><tr><td class="hint">Contexts below <i>n</i><sub>min</sub></td><td class="num">${pt.below} of ${Math.min(pt.nCtx, 5000).toLocaleString()}</td></tr><tr><td class="hint">Recommended (quantiles, every context ≥ <i>n</i><sub>min</sub>)</td><td style="font-size:12px">${recs.slice(-4).reverse().join('<br>') || 'none — use fewer assets or a shorter period'}</td></tr></tbody></table>`;
   } else $('#sb-part').innerHTML = '<span class="hint">Preview unavailable for this configuration.</span>';
   const items = []; const add = (c, t) => items.push([c, t]);
   m >= 2 && m <= 4 ? add('ok', `${m} assets in the joint state`) : add('x', 'Select 2 to 4 assets for the joint state');
   add(ctx > 100000 ? 'w' : 'ok', `${ctx.toLocaleString()} possible contexts (no fixed limit on k; only observed contexts are stored)`);
   P >= 1 && P <= 63 ? add('ok', `Period of ${P} session${P > 1 ? 's' : ''}`) : add('x', 'Period must be 1 to 63 sessions');
-  nmin >= 1 ? add('ok', `n_min = ${nmin}`) : add('x', 'n_min must be at least 1');
+  nmin >= 1 ? add('ok', `<i>n</i><sub>min</sub> = ${nmin}`) : add('x', '<i>n</i><sub>min</sub> must be at least 1');
   const G = +$('#sb-G').value, smax = +$('#sb-smax').value, cap = +$('#sb-cap').value;
   G > 0 && G <= 100 ? add('ok', `Gross exposure ${G}% ≤ 100%`) : add('x', `Gross exposure ${G}% rejected: at most 100%`);
   if (SB.mode === 'ls') (smax >= 0 && smax <= G ? add('ok', `Short limit ${smax}%`) : add('x', 'The short limit must be between 0 and the gross exposure'));
   cap > 0 && cap <= 100 ? (cap < 100 ? add('w', `Optional cap ${cap}%: scales the portfolio down, the rest stays in cash`) : add('ok', 'No per-asset cap')) : add('x', 'Cap must be between 1% and 100%');
   if (+$('#sb-alpha').value > 0 || +$('#sb-tau').value > 0) add('w', 'Smoothing or shrinkage is on: the run will be labelled');
   if (SB.bnd === 'f' && thr.length < s - 1) add('x', `Enter ${s - 1} fixed thresholds`);
-  if (per < nmin) add('w', 'Average transitions below n_min (see previews)');
+  if (per < nmin) add('w', 'Average transitions below <i>n</i><sub>min</sub> (see previews)');
   const h0 = +$('#sb-h0').value, h1 = +$('#sb-h1').value;
   h0 >= 2006 && h1 <= 2025 && h0 <= h1 ? (h1 < 2025 ? add('w', 'Holdout inside the history: the result tests whether the structure exists, not forward performance') : add('ok', `Holdout ${h0}–${h1} at the end: a forward test`)) : add('x', 'Holdout must lie within 2006–2025');
   $('#sb-train').textContent = h1 < 2025 ? `2005–2025 except ${h0}–${h1} (purged at both boundaries)` : `2005–${h0 - 1} · walk-forward folds`;
@@ -599,8 +600,8 @@ const NAME = { L:'low', M:'middle', H:'high' };
 J.forEach(c => { const o = el('option', { value:c }, `${c} — SPY ${NAME[c[0]]} · TLT ${NAME[c[1]]}`); if (c === 'LH') o.selected = true; $('#mi-ctx').appendChild(o); });
 function drawTrans() {
   const c = $('#mi-ctx').value, n = COUNTS[c], nc = n.reduce((a,b)=>a+b,0), p = probs(n), sp = SUPPORT(nc);
-  const x2 = chi2(n); $('#mi-ctxinfo').innerHTML = `n_c = <b class="num">${nc}</b> <span class="tag ${sp[1]}">${sp[0]}</span> <span class="hint">χ² vs order 0 = ${f(x2,2)} (8 df), p = ${f(chi2p(x2,8),3)}</span>`;
-  $('#mi-table').innerHTML = '<thead><tr><th>Next state j</th><th class="r">Count n_c,j</th><th class="r">π_j</th><th class="r">p(j | c)</th><th class="r">95% interval</th><th class="r">r_j SPY</th><th class="r">r_j TLT</th></tr></thead><tbody>' +
+  const x2 = chi2(n); $('#mi-ctxinfo').innerHTML = `<i>n</i><sub>c</sub> = <b class="num">${nc}</b> <span class="tag ${sp[1]}">${sp[0]}</span> <span class="hint">χ² vs order 0 = ${f(x2,2)} (8 df), p = ${f(chi2p(x2,8),3)}</span>`;
+  $('#mi-table').innerHTML = '<thead><tr><th>Next state j</th><th class="r">Count <i>n</i><sub>c,j</sub></th><th class="r"><i>π</i><sub>j</sub></th><th class="r">p(j | c)</th><th class="r">95% interval</th><th class="r"><i>r</i><sub>j</sub> SPY</th><th class="r"><i>r</i><sub>j</sub> TLT</th></tr></thead><tbody>' +
     J.map((j,i) => { const ci = wilson(n[i], nc); return `<tr><td class="tk">${j}</td><td class="r num">${n[i]}</td><td class="r num">${f(PI[i],2)}</td><td class="r num">${f(p[i])}</td><td class="r num">[${f(ci[0],3)}, ${f(ci[1],3)}]</td><td class="r num">${R[i][0] >= 0 ? '+' : ''}${f(R[i][0],2)}%</td><td class="r num">${R[i][1] >= 0 ? '+' : ''}${f(R[i][1],2)}%</td></tr>`; }).join('') +
     `<tr><td><b>Total</b></td><td class="r num"><b>${nc}</b></td><td class="r num">1.00</td><td class="r num"><b>${f(p.reduce((a,b)=>a+b,0))}</b></td><td></td><td></td><td></td></tr></tbody>`;
 }
@@ -614,7 +615,7 @@ let opMode = 'lo';
 function drawOpt() {
   const cs = $('#op-case').value === 'main' ? COUNTS.LH : COUNTS.CASH, cap = Math.min(100, Math.max(1, +$('#op-cap').value || 100)) / 100, tau = Math.max(0, +$('#op-tau').value || 0);
   const o = optimize(cs, { cap, tau, mode: opMode, Smax: 0.5, borrow: 1 }), M2 = m => `[ ${f(m[0][0],5)}  ${f(m[0][1],5)} ; ${f(m[1][0],5)}  ${f(m[1][1],5)} ]`;
-  $('#op-est').innerHTML = `<div style="margin-bottom:6px"><math display="block"><munder><mo>maximize</mo><mi>w</mi></munder><mfrac><mrow><msup><mi>w</mi><mi>T</mi></msup><msub><mi>e</mi><mi>c</mi></msub></mrow><msqrt><msup><mi>w</mi><mi>T</mi></msup><msub><mi>Σ</mi><mi>c</mi></msub><mi>w</mi></msqrt></mfrac></math></div>n_c = <b>${o.nc}</b> (${o.nc >= 100 ? 'supported' : 'insufficient'}) · p(j | c) = n_c,j / n_c (empirical)` + (tau > 0 ? `<br>optional shrinkage on: λ_c = ${f(o.lam)}` : '') + `<br>μ_c = (${f(o.mu[0],5)}, ${f(o.mu[1],5)}) · order-0 μ̄ = (${f(o.m0.mu[0],5)}, ${f(o.m0.mu[1],5)})<br>e_c = μ_c − r_f = <b>(${f(o.e[0],5)}, ${f(o.e[1],5)})</b><br>Σ_c = <b>${M2(o.S)}</b><br>χ² vs order 0 = ${f(chi2(cs),2)} (8 df)`;
+  $('#op-est').innerHTML = `<div style="margin-bottom:6px"><math display="block"><munder><mo>maximize</mo><mi>w</mi></munder><mfrac><mrow><msup><mi>w</mi><mi>T</mi></msup><msub><mi>e</mi><mi>c</mi></msub></mrow><msqrt><msup><mi>w</mi><mi>T</mi></msup><msub><mi>Σ</mi><mi>c</mi></msub><mi>w</mi></msqrt></mfrac></math></div><i>n</i><sub>c</sub> = <b>${o.nc}</b> (${SUPCLS(o.nc)}) · p(j | c) = <i>n</i><sub>c,j</sub> / <i>n</i><sub>c</sub> (empirical)` + (tau > 0 ? `<br>optional shrinkage on: <i>λ</i><sub>c</sub> = ${f(o.lam)}` : '') + `<br><i>μ</i><sub>c</sub> = (${f(o.mu[0],5)}, ${f(o.mu[1],5)}) · order-0 μ̄ = (${f(o.m0.mu[0],5)}, ${f(o.m0.mu[1],5)})<br><i>e</i><sub>c</sub> = <i>μ</i><sub>c</sub> − <i>r</i><sub>f</sub> = <b>(${f(o.e[0],5)}, ${f(o.e[1],5)})</b><br><i>Σ</i><sub>c</sub> = <b>${M2(o.S)}</b><br>χ² vs order 0 = ${f(chi2(cs),2)} (8 df)`;
   $('#op-port').innerHTML = o.d ? `direction d = <b>(${pct(o.d[0])}, ${pct(o.d[1])})</b>${opMode === 'ls' ? ' · Σ|d| = 1' : ''}<br>scale s = <b>${f(o.s)}</b> · set by the <b>${o.why}</b><br>long ${pct(o.longX,1)} · short ${pct(o.shortX,1)} · gross ${pct(o.longX + o.shortX,1)} · net ${pct(o.longX - o.shortX,1)}<br>expected return ${f(o.E,5)}% · volatility ${f(o.sd,5)}% per session<br>Sharpe ${f(o.sr,5)} per session · ${f(o.sr*Math.sqrt(252),3)} annualized (display only)` : `No asset has a positive expected excess return.<br><b>Long-only allocation: 100% cash.</b> Try Long-Short mode.`;
   drawFrontier(o, cs);
   $('#op-w').innerHTML = '<thead><tr><th>Asset</th><th class="r">Weight</th><th class="r">Amount ($100,000)</th></tr></thead><tbody>' + ['SPY','TLT'].map((t,i) => `<tr><td class="tk">${t}</td><td class="r num">${pct(o.w[i]).replace('-','−')}</td><td class="r num">${money(100000*o.w[i])}</td></tr>`).join('') + `<tr><td class="tk">Cash</td><td class="r num">${pct(o.cash)}</td><td class="r num">${money(100000*o.cash)}</td></tr></tbody>`;
@@ -657,7 +658,7 @@ function drawBacktest() {
 // ------------------------------------------------------------ SC-08
 const STAGES = ['Ingestion','Validation','Encoding','Counting','Estimation','Optimization','Backtest','Baselines and statistics'];
 const JOBS = [{id:'R-3014', name:'SPY-GLD daily', st:'running', stage:5, sub:'08:36 UTC', upd:'08:41:12 UTC'}, {id:'R-3013', name:'SPY-TLT, cap 50%', st:'queued', stage:-1, sub:'08:38 UTC', upd:'08:38:02 UTC'},
-  {id:'R-3009', name:'SPY-TLT-GLD, k = 1', st:'failed', stage:3, sub:'yesterday', upd:'yesterday', why:'Counting stopped: 41% of contexts are below n_floor for m = 3, s = 3, k = 1. Reduce the group size or the number of categories.'}, {id:'R-3012', name:'SPY-TLT daily joint state', st:'done', stage:8, sub:'2 days ago', upd:'2 days ago'}];
+  {id:'R-3009', name:'SPY-TLT-GLD, k = 1', st:'failed', stage:3, sub:'yesterday', upd:'yesterday', why:'Counting stopped: 41% of contexts are below <i>n</i><sub>floor</sub> for m = 3, s = 3, k = 1. Reduce the group size or the number of categories.'}, {id:'R-3012', name:'SPY-TLT daily joint state', st:'done', stage:8, sub:'2 days ago', upd:'2 days ago'}];
 function drawJobs() {
   $('#jobcnt').textContent = JOBS.filter(j => j.st === 'running' || j.st === 'queued').length || '';
   $('#jobs').innerHTML = JOBS.map(j => { const stg = STAGES.map((s,i) => `<span class="stage ${j.st === 'failed' && i === j.stage ? 'f' : i < j.stage || j.st === 'done' ? 'd' : i === j.stage && j.st === 'running' ? 'a' : ''}">${s}</span>`).join('');
@@ -677,7 +678,7 @@ $('#oi').innerHTML = '<thead><tr><th>ID</th><th>Topic</th><th>Status</th><th>Own
 
 // ------------------------------------------------------------ init
 
-// ------------------------------------------------------------ interactive charts with Plotly.js (FR-23 to FR-25)
+// ------------------------------------------------------------ interactive charts with Plotly.js (FR-21 to FR-23)
 const PC = { displaylogo: false, responsive: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'], toImageButtonOptions: { format: 'png', filename: 'stochtrade_chart' } };
 function plot(id, data, layout, cfg) {
   const base = { margin: { l: 56, r: 16, t: 16, b: 44 }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)', font: { family: 'DM Sans, system-ui, sans-serif', size: 12, color: css('--ink') || '#222' }, hoverlabel: { font: { family: 'IBM Plex Mono, monospace', size: 12 } } };
@@ -703,7 +704,7 @@ function rollingSharpe(r, w) { const out = new Array(r.length).fill(null); let s
 window.__pit = { stateTimeline, rollingSharpe, SYN, BT };
 const TL = stateTimeline(SYN[0], SYN[1]);
 
-// ---- Markov chain view with interactive merging (FR-23, FR-26)
+// ---- Markov chain view with interactive merging (FR-21, FR-24)
 const POS = j => ({ x: { L: 0, M: 1, H: 2 }[j[1]], y: { L: 0, M: 1, H: 2 }[j[0]] });
 let MAP = J.map((_, i) => i);            // raw joint state -> representative raw state of its model state (FR-05 state mapping)
 const MERGES = [];                       // stack of { label, prev } so merges can be undone one at a time
@@ -718,9 +719,9 @@ function chainModel(map) {
 }
 function decideG(model, k) {
   const n = model.cnt[k], nc = n.reduce((a, b) => a + b, 0);
-  const o = nc >= 100 ? optimize(n, { R: model.Rg, PI: model.PIg }) : null;
+  const o = optimize(nc >= 30 ? n : model.PIg.map(x => x * 1000), { R: model.Rg, PI: model.PIg }), bo = nc < 30;
   const x2 = chi2(n, model.PIg), df = model.G.length - 1;
-  return { n, nc, o, p: n.map(x => x / nc), x2, df, pv: chi2p(x2, df) };
+  return { n, nc, o, bo, p: n.map(x => x / nc), x2, df, pv: chi2p(x2, df) };
 }
 const GPOS = (model, k) => POS(J[model.G[k].rep]);
 function chainFigure(divId, model, selK, draggable) {
@@ -739,7 +740,7 @@ function chainFigure(divId, model, selK, draggable) {
   const node = { x: model.G.map((_, k) => GPOS(model, k).x), y: model.G.map((_, k) => GPOS(model, k).y), mode: 'markers+text', type: 'scatter',
     text: model.G.map(g => `<b>${model.name(g)}</b>`), textfont: { size: model.G.map(g => g.members.length > 1 ? 11 : 15), color: model.G.map((_, k) => k === selK ? '#FFFFFF' : '#1F3864') },
     marker: { symbol: 'square', size: model.G.map(g => g.members.length > 1 ? 84 : 70), color: model.G.map((g, k) => k === selK ? '#1F3864' : !sup[k] ? '#E2E2E2' : g.members.length > 1 ? '#FFF4D6' : '#EEF1FB'), line: { color: model.G.map((g, k) => !sup[k] ? '#9A9A9A' : g.members.length > 1 ? '#B8860B' : '#5B6FB5'), width: 1.6 } },
-    customdata: model.G.map((g, k) => [tot[k], sup[k] ? 'supported' : 'insufficient → cash', g.members.length]), hovertemplate: '%{text}<br>n_c = %{customdata[0]} (%{customdata[1]})<extra>' + (draggable ? 'click to select · drag onto another state to merge' : 'original chain') + '</extra>' };
+    customdata: model.G.map((g, k) => [tot[k], SUPCLS(tot[k]), g.members.length]), hovertemplate: '%{text}<br><i>n</i><sub>c</sub> = %{customdata[0]} (%{customdata[1]})<extra>' + (draggable ? 'click to select · drag onto another state to merge' : 'original chain') + '</extra>' };
   plot(divId, [...lines, node], { height: 430, margin: { l: 70, r: 20, t: 10, b: 52 }, showlegend: false, hovermode: 'closest', dragmode: draggable ? false : 'zoom', annotations: ann, shapes,
     xaxis: { range: [-0.55, 2.55], tickvals: [0, 1, 2], ticktext: ['low', 'mid', 'high'], title: { text: 'TLT category' }, showgrid: false, zeroline: false, fixedrange: draggable },
     yaxis: { range: [-0.55, 2.55], tickvals: [0, 1, 2], ticktext: ['low', 'mid', 'high'], title: { text: 'SPY category' }, showgrid: false, zeroline: false, fixedrange: draggable } });
@@ -768,19 +769,20 @@ function mergeGroups(srcRep, tgtRep) {
 }
 function undoMerge() { if (!MERGES.length) return; MAP = MERGES.pop().prev; if (MAP[mcRep] !== mcRep) mcRep = MAP[mcRep]; drawChain(); }
 function resetMerges() { while (MERGES.length) MAP = MERGES.pop().prev; drawChain(); }
-function explainG(model, k) {
+function explainG(model, k) { const D0 = decideG(model, k); const note = D0.nc < 30 ? `<div class="note warn"><span><b>Unsupported context:</b> n<sub>c</sub> = ${D0.nc} &lt; n<sub>floor</sub> = 30. The decision backs off to the order-0 distribution and is flagged (FR-07). Merging it with a similar state can bring it above n<sub>min</sub> (FR-24).</span></div>` : D0.nc < 100 ? `<div class="note warn"><span><b>Low support:</b> n<sub>c</sub> = ${D0.nc} is below n<sub>min</sub> = 100. The estimates are used and the decision is flagged (FR-07).</span></div>` : ''; return note + explainG0(model, k); }
+function explainG0(model, k) {
   const g = model.G[k], nm = model.name(g), D = decideG(model, k), o = D.o;
   const label = g.members.length > 1 ? `${nm} — merged state of ${g.members.length} joint states` : `${nm} — SPY ${NAME[nm[0]]}, TLT ${NAME[nm[1]]}`;
-  if (!o) return `<p><b>${label}</b></p><div class="note warn"><span><b>Insufficient context:</b> n_c = ${D.nc} &lt; n_min = 100. Its probabilities are not used; under the default policy, decisions in this state hold 100% cash (FR-07). Merging it with a similar state can bring it above n_min (FR-26).</span></div>`;
+  if (!o) return `<p><b>${label}</b></p><div class="note warn"><span><b>Insufficient context:</b> <i>n</i><sub>c</sub> = ${D.nc} &lt; <i>n</i><sub>min</sub> = 100. Its probabilities are not used; under the default policy, decisions in this state hold 100% cash (FR-07). Merging it with a similar state can bring it above <i>n</i><sub>min</sub> (FR-24).</span></div>`;
   const order = D.p.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]), corr = o.S[0][1] / Math.sqrt(o.S[0][0] * o.S[1][1]), dS = o.mu[0] - o.m0.mu[0], dT = o.mu[1] - o.m0.mu[1];
   let why;
   if (!o.d) why = 'Neither asset has a positive expected excess return after this state, so the Long-only allocation is 100% cash.';
   else if (o.w[0] > 0 && o.w[1] > 0) why = `Both conditional expected returns are positive, and the conditional correlation is ${corr < 0 ? 'negative' : 'positive'} (${f(corr, 2)}). ${corr < 0 ? 'Because the two assets tend to move in opposite directions after this state, holding both lowers the risk more than it lowers the return' : 'The optimizer splits the money by expected return per unit of risk'}, which gives ${pct(o.w[0])} SPY and ${pct(o.w[1])} TLT.`;
   else { const a = o.w[0] > 0 ? 0 : 1; why = `${a ? 'TLT' : 'SPY'} has the higher expected return per unit of risk after this state, and the other asset’s expected return is ${o.mu[1 - a] <= 0 ? 'not positive' : 'too low to improve the ratio'}, so the portfolio holds only ${a ? 'TLT' : 'SPY'}.`; }
   const move = (d, n) => `${n} ${d >= 0 ? 'higher' : 'lower'} by ${f(Math.abs(d), 4)} points`;
-  return `<p style="margin-bottom:6px"><b>${label}</b> · n_c = <b class="num">${D.nc}</b> <span class="tag t-ok">supported</span></p>
+  return `<p style="margin-bottom:6px"><b>${label}</b> · <i>n</i><sub>c</sub> = <b class="num">${D.nc}</b> <span class="tag ${SUPPORT(D.nc)[1]}">${SUPPORT(D.nc)[0]}</span></p>
     <p class="hint" style="margin-bottom:6px"><math><mi>p</mi><mo>(</mo><mi>j</mi><mo>∣</mo><mi>c</mi><mo>)</mo><mo>=</mo><mfrac><msub><mi>n</mi><mrow><mi>c</mi><mo>,</mo><mi>j</mi></mrow></msub><msub><mi>n</mi><mi>c</mi></msub></mfrac></math> · most likely next states: ${order.slice(0, 3).map(([v, i]) => `<b>${model.name(model.G[i])}</b> ${pct(v, 1)}`).join(', ')}</p>
-    <table><tbody><tr><td class="hint">Expected return μ_c (SPY, TLT)</td><td class="num">${f(o.mu[0], 5)}%, ${f(o.mu[1], 5)}%</td></tr><tr><td class="hint">Order 0 (no state)</td><td class="num">${f(o.m0.mu[0], 4)}%, ${f(o.m0.mu[1], 4)}%</td></tr><tr><td class="hint">Covariance Σ_c</td><td class="num">[${f(o.S[0][0], 5)}, ${f(o.S[0][1], 5)} ; ${f(o.S[1][0], 5)}, ${f(o.S[1][1], 5)}]</td></tr><tr><td class="hint">Volatility; correlation</td><td class="num">${f(Math.sqrt(o.S[0][0]), 3)}%, ${f(Math.sqrt(o.S[1][1]), 3)}%; ${f(corr, 2)}</td></tr><tr><td class="hint">Max-Sharpe weights</td><td class="num"><b>${o.d ? `SPY ${pct(o.w[0])}, TLT ${pct(o.w[1])}` : '100% cash'}</b></td></tr>${o.d ? `<tr><td class="hint">Sharpe per session (annualized)</td><td class="num">${f(o.sr, 4)} (${f(o.sr * Math.sqrt(252), 3)})</td></tr>` : ''}</tbody></table>
+    <table><tbody><tr><td class="hint">Expected return <i>μ</i><sub>c</sub> (SPY, TLT)</td><td class="num">${f(o.mu[0], 5)}%, ${f(o.mu[1], 5)}%</td></tr><tr><td class="hint">Order 0 (no state)</td><td class="num">${f(o.m0.mu[0], 4)}%, ${f(o.m0.mu[1], 4)}%</td></tr><tr><td class="hint">Covariance <i>Σ</i><sub>c</sub></td><td class="num">[${f(o.S[0][0], 5)}, ${f(o.S[0][1], 5)} ; ${f(o.S[1][0], 5)}, ${f(o.S[1][1], 5)}]</td></tr><tr><td class="hint">Volatility; correlation</td><td class="num">${f(Math.sqrt(o.S[0][0]), 3)}%, ${f(Math.sqrt(o.S[1][1]), 3)}%; ${f(corr, 2)}</td></tr><tr><td class="hint">Max-Sharpe weights</td><td class="num"><b>${o.d ? `SPY ${pct(o.w[0])}, TLT ${pct(o.w[1])}` : '100% cash'}</b></td></tr>${o.d ? `<tr><td class="hint">Sharpe per session (annualized)</td><td class="num">${f(o.sr, 4)} (${f(o.sr * Math.sqrt(252), 3)})</td></tr>` : ''}</tbody></table>
     <p style="margin-top:8px"><b>Why these weights.</b> ${why} Compared with ignoring the state, the expected returns are ${move(dS, 'SPY')} and ${move(dT, 'TLT')} per session.</p>
     <p class="hint" style="margin-top:6px"><b>Evidence:</b> χ² against order 0 = ${f(D.x2, 2)} (${D.df} df), p = ${f(D.pv, 3)} — ${D.pv < 0.05 ? 'this state changes the next-state distribution.' : 'no evidence that this state changes the next-state distribution, so the allocation rests on weak evidence.'}</p>
     <p class="hint">Research output from training data — not investment advice.</p>`;
@@ -797,7 +799,7 @@ function drawChain() {
   const model = chainModel(MAP), orig = chainModel(J.map((_, i) => i)), k = model.idxOfRep(MAP[mcRep]);
   const showOrig = mergeMode === 'compare' && MERGES.length > 0;
   $('#mc-origcard').hidden = !showOrig; $('#mc-cmpcard').hidden = !showOrig;
-  $('#mc-title').innerHTML = MERGES.length ? (mergeMode === 'compare' ? 'Merged chain <small>drag to merge more · click to select</small>' : 'Chain with merged mapping (replaces the original) <small>drag to merge more · click to select</small>') : 'Markov chain <small>click a state to select it · drag a state onto another to merge them (FR-26)</small>';
+  $('#mc-title').innerHTML = MERGES.length ? (mergeMode === 'compare' ? 'Merged chain <small>drag to merge more · click to select</small>' : 'Chain with merged mapping (replaces the original) <small>drag to merge more · click to select</small>') : 'Markov chain <small>click a state to select it · drag a state onto another to merge them (FR-24)</small>';
   chainFigure('mc-plot', model, k, true);
   if (showOrig) { const ko = orig.idxOfRep(mcRep); chainFigure('mc-orig', orig, ko >= 0 ? ko : 0, false); drawCompareTable(orig, model); }
   $('#mc-panel').innerHTML = explainG(model, k);
@@ -821,17 +823,17 @@ function drawHeat() {
   const minN = +$('#mh-min').value; $('#mh-minv').textContent = minN;
   const tot = J.map(c => COUNTS[c].reduce((a, b) => a + b, 0));
   const z = J.map((c, i) => tot[i] >= minN ? probs(COUNTS[c]).map(v => v * 100) : J.map(() => null));
-  const txt = J.map((c, i) => J.map((_, k) => tot[i] >= minN ? `n_c=${tot[i]}${tot[i] < 100 ? ' (insufficient)' : ''}` : 'hidden by filter'));
+  const txt = J.map((c, i) => J.map((_, k) => tot[i] >= minN ? `n<sub>c</sub>=${tot[i]} (${SUPCLS(tot[i])})` : 'hidden by filter'));
   plot('mh-plot', [{ z, x: J, y: J.map((c, i) => tot[i] < 100 ? c + ' ⚠' : c), type: 'heatmap', colorscale: [[0, '#F7F9FD'], [1, '#C0504D']], text: txt, hovertemplate: 'context %{y} → next %{x}<br>p = %{z:.1f}%<br>%{text}<extra></extra>', colorbar: { title: { text: '%' } } }],
-    { height: 380, margin: { l: 70, r: 20, t: 10, b: 50 }, xaxis: { title: { text: 'Next joint state j' } }, yaxis: { title: { text: 'Context c (⚠ = n_c < n_min)' }, autorange: 'reversed' } });
+    { height: 380, margin: { l: 70, r: 20, t: 10, b: 50 }, xaxis: { title: { text: 'Next joint state j' } }, yaxis: { title: { text: 'Context c (⚠ = <i>n</i><sub>c</sub> < <i>n</i><sub>min</sub>)' }, autorange: 'reversed' } });
 }
 function drawQuality() {
   const ns = J.map(c => COUNTS[c].reduce((a, b) => a + b, 0)), sorted = [...ns].sort((a, b) => a - b);
-  plot('mi-bars', [{ x: J, y: ns, type: 'bar', marker: { color: ns.map(n => n < 100 ? '#C0504D' : '#2E7D5B') }, hovertemplate: '%{x}: n_c = %{y}<extra></extra>' }],
+  plot('mi-bars', [{ x: J, y: ns, type: 'bar', marker: { color: ns.map(n => n < 100 ? '#C0504D' : '#2E7D5B') }, hovertemplate: '%{x}: <i>n</i><sub>c</sub> = %{y}<extra></extra>' }],
     { height: 260, margin: { l: 50, r: 10, t: 10, b: 40 }, yaxis: { title: { text: 'Transitions' } }, shapes: [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 100, y1: 100, line: { dash: 'dot', color: '#B26B00' } }],
-      annotations: [{ xref: 'paper', x: 1, y: 100, text: 'n_min = 100', showarrow: false, yshift: 10, xanchor: 'right', font: { color: '#B26B00', size: 11 } }] });
+      annotations: [{ xref: 'paper', x: 1, y: 100, text: '<i>n</i><sub>min</sub> = 100', showarrow: false, yshift: 10, xanchor: 'right', font: { color: '#B26B00', size: 11 } }] });
   const ent = (() => { const tot = ns.reduce((a, b) => a + b, 0); return -ns.reduce((s, n) => s + (n / tot) * Math.log2(n / tot), 0); })();
-  $('#mi-q').innerHTML = kv([['Contexts', '9 (m = 2, s = 3, k = 1)'], ['Minimum support', `<span class="num">${sorted[0]}</span>`], ['Median support', `<span class="num">${sorted[4]}</span>`], ['Contexts below n_min', `${ns.filter(n => n < 100).length} of 9`], ['Decisions in insufficient contexts', '1.3% → held in cash'], ['Entropy of the context distribution', `<span class="num">${f(ent, 3)} bits (max ${f(Math.log2(9), 3)})</span>`]]);
+  $('#mi-q').innerHTML = kv([['Contexts', '9 (m = 2, s = 3, k = 1)'], ['Minimum support', `<span class="num">${sorted[0]}</span>`], ['Median support', `<span class="num">${sorted[4]}</span>`], ['Contexts below <i>n</i><sub>min</sub>', `${ns.filter(n => n < 100).length} of 9`], ['Decisions in low-support or unsupported contexts', '1.3% (flagged; unsupported ones back off)'], ['Entropy of the context distribution', `<span class="num">${f(ent, 3)} bits (max ${f(Math.log2(9), 3)})</span>`]]);
 }
 function drawReliability() {
   const b = [0.05, 0.10, 0.15, 0.20, 0.25], o = [0.054, 0.096, 0.153, 0.187, 0.262], e = [0.010, 0.012, 0.015, 0.022, 0.035];
@@ -844,7 +846,7 @@ function drawFeasHeat(m, nmin, P) {
   const S = [2, 3, 4, 5], K = [1, 2, 3, 4, 5, 6], sess = 5290 / Math.max(1, P);
   const z = K.map(k => S.map(s => Math.log10(sess / Math.pow(s, m * k))));
   const txt = K.map(k => S.map(s => { const v = sess / Math.pow(s, m * k); return (v >= 10 ? Math.round(v).toLocaleString() : v.toFixed(1)) + (v < nmin ? ' ✕' : ''); }));
-  plot('sb-heat', [{ z, x: S.map(s => 's = ' + s), y: K.map(k => 'k = ' + k), type: 'heatmap', text: txt, texttemplate: '%{text}', hovertemplate: '%{y}, %{x}: %{text} transitions per context<extra>✕ = below n_min</extra>', colorscale: [[0, '#FBE5E5'], [0.5, '#FFF4D6'], [1, '#D6EBDD']], zmin: 0, zmax: 3.5, showscale: false }],
+  plot('sb-heat', [{ z, x: S.map(s => 's = ' + s), y: K.map(k => 'k = ' + k), type: 'heatmap', text: txt, texttemplate: '%{text}', hovertemplate: '%{y}, %{x}: %{text} transitions per context<extra>✕ = below <i>n</i><sub>min</sub></extra>', colorscale: [[0, '#FBE5E5'], [0.5, '#FFF4D6'], [1, '#D6EBDD']], zmin: 0, zmax: 3.5, showscale: false }],
     { height: 250, margin: { l: 50, r: 10, t: 8, b: 30 }, yaxis: { autorange: 'reversed' } });
 }
 let histBound = false, histCuts = null;
@@ -872,10 +874,10 @@ function drawFrontier(o, cs) {
     tr.push({ x: [sd0], y: [E0], mode: 'markers', name: 'Maximum-Sharpe direction d', marker: { size: 12, color: '#C0504D', symbol: 'star' }, hovertemplate: 'd: SPY ' + pct(o.d[0]) + ', TLT ' + pct(o.d[1]) + '<extra></extra>' });
     tr.push({ x: [o.sd], y: [o.E], mode: 'markers', name: 'Chosen weights (after scaling)', marker: { size: 10, color: '#1F3864' }, hovertemplate: 'w: SPY ' + pct(o.w[0]) + ', TLT ' + pct(o.w[1]) + '<extra></extra>' }); }
   plot('op-front', tr, { height: 300, margin: { l: 64, r: 10, t: 10, b: 44 }, xaxis: { title: { text: 'Risk σ per session (%)' }, rangemode: 'tozero' }, yaxis: { title: { text: 'Expected return per session (%)' } }, legend: { orientation: 'h', y: -0.3 } });
-  const res = J.map(c => COUNTS[c].reduce((a, b) => a + b, 0) < 100 ? null : optimize(COUNTS[c], { cap: Math.min(100, Math.max(1, +$('#op-cap').value || 100)) / 100, tau: Math.max(0, +$('#op-tau').value || 0), mode: opMode }));
+  const res = J.map(c => optimize(COUNTS[c].reduce((a, b) => a + b, 0) < 30 ? PI.map(x => x * 1000) : COUNTS[c], { cap: Math.min(100, Math.max(1, +$('#op-cap').value || 100)) / 100, tau: Math.max(0, +$('#op-tau').value || 0), mode: opMode }));
   const g = (fn) => res.map(r => r ? fn(r) * 100 : 0);
   plot('op-wbars', [{ x: J, y: g(r => r.w[0]), name: 'SPY', type: 'bar', marker: { color: '#1F3864' } }, { x: J, y: g(r => r.w[1]), name: 'TLT', type: 'bar', marker: { color: '#7FB79E' } }, { x: J, y: res.map(r => r ? r.cash * 100 : 100), name: 'Cash', type: 'bar', marker: { color: '#D9D9D9' } }],
-    { height: 260, barmode: 'relative', margin: { l: 50, r: 10, t: 10, b: 40 }, yaxis: { title: { text: 'Weight (%)' } }, xaxis: { title: { text: 'Context (insufficient contexts hold cash)' } }, legend: { orientation: 'h', y: 1.15 } });
+    { height: 260, barmode: 'relative', margin: { l: 50, r: 10, t: 10, b: 40 }, yaxis: { title: { text: 'Weight (%)' } }, xaxis: { title: { text: 'Context (unsupported contexts back off to order 0)' } }, legend: { orientation: 'h', y: 1.15 } });
 }
 // ---- backtest charts (SC-07)
 let rsWin = 126, rsBound = false;
@@ -893,8 +895,8 @@ function drawEquity() {
 }
 function showDecision(date) {
   const i = DAYS.indexOf(String(date).slice(0, 10)); if (i < 1) return;
-  const ctx = J[TL[i - 1]], n = COUNTS[ctx], nc = n.reduce((a, b) => a + b, 0), o = nc >= 100 ? optimize(n) : null, p = probs(n), top = p.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]).slice(0, 3);
-  $('#bt-pick').innerHTML = `<div class="note info"><span><b>Decision of ${DAYS[i]}</b> (model of fold ${DAYS[i].slice(0, 4)}, fitted on earlier data) · context <b>${ctx}</b>, n_c = ${nc} · most likely next: ${top.map(([v, k]) => `${J[k]} ${pct(v, 1)}`).join(', ')} · weights: <b>${o ? (o.d ? `SPY ${pct(o.w[0])}, TLT ${pct(o.w[1])}` : '100% cash') : '100% cash (insufficient context)'}</b> <button class="lnk" type="button" data-go="insights">open in Model insights</button></span></div>`;
+  const ctx = J[TL[i - 1]], n = COUNTS[ctx], nc = n.reduce((a, b) => a + b, 0), o = optimize(nc >= 30 ? n : PI.map(x => x * 1000)), p = probs(n), top = p.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]).slice(0, 3);
+  $('#bt-pick').innerHTML = `<div class="note info"><span><b>Decision of ${DAYS[i]}</b> (model of fold ${DAYS[i].slice(0, 4)}, fitted on earlier data) · context <b>${ctx}</b>, <i>n</i><sub>c</sub> = ${nc} · most likely next: ${top.map(([v, k]) => `${J[k]} ${pct(v, 1)}`).join(', ')} · weights: <b>${o ? (o.d ? `SPY ${pct(o.w[0])}, TLT ${pct(o.w[1])}` : '100% cash') : '100% cash'}</b> <button class="lnk" type="button" data-go="insights">open in Model insights</button></span></div>`;
 }
 function drawRolling() {
   const tr = BKEYS.slice(0, 3).map(([k, nm, c]) => { const r = BT.ret[k], rs = rollingSharpe(r, rsWin); return { x: BTD, y: rs, name: nm, type: 'scatter', mode: 'lines', line: { color: c, width: k === 'st' ? 2 : 1.2 }, hovertemplate: nm + ': %{y:.2f}<extra>%{x}</extra>' }; });
