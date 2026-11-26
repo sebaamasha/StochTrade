@@ -1,79 +1,71 @@
 # StochTrade
 
-A joint-state Markov research platform for ETF portfolio allocation.
-Final project, B.Sc. Software Engineering, Shenkar College (2026–2027).
+**A joint-state Markov research platform for ETF portfolio allocation**
+Final project, B.Sc. in Software Engineering, Shenkar College, Faculty of Engineering (2026–2027).
 
-**Team:** Baraa Haj, Seba Amasha, Aseel Abu Saleh
+| | |
+|---|---|
+| Team | Seba Amasha ([@sebaamasha](https://github.com/sebaamasha)) · Baraa Haj ([@Baraa40](https://github.com/Baraa40)) · Aseel Abu Saleh |
+| Supervisors | Dr. Dvir Ross (research direction) · Dr. Marcelo Sihman (software engineering) |
+| Current stage | Software Requirements Specification (November 2026) |
 
-**Supervisors:** Dr. Dvir Ross, Dr. Marcelo Sihman
+## What the project does
 
-> StochTrade is a research tool. All results are simulated research outputs, not investment advice.
+StochTrade tests whether the **joint** recent behaviour of a small group of ETFs (for example SPY and TLT) carries usable information about their next-period returns.
 
-## Research question
+1. Each asset's period return is assigned to a category (by default low, middle, or high, from training quantiles). The categories of all assets form a **joint state**.
+2. An empirical **Markov chain** counts how often each joint state follows each context and uses the observed frequencies as the next-state distribution.
+3. Each next state carries a representative return vector, so the chain gives a **state-conditional expected return vector and covariance matrix**.
+4. In every state the system finds the portfolio with the **highest expected excess return per unit of risk** (long-only by default, long-short as an option) and holds cash when no positive expectation exists.
+5. A **walk-forward backtest** with costs compares the strategy with baselines (buy-and-hold, 1/N, the same optimizer without states, separate chains per asset, and a placebo) on a locked holdout, with block-bootstrap confidence intervals and pre-registered hypotheses.
 
-Does the joint recent behaviour of a small group of ETFs (for example SPY and TLT) carry usable information about their next-period returns, and does a portfolio built from that information perform better, after costs, than portfolios that ignore it?
+Predictability is treated as a hypothesis to test; negative results are reported.
 
-## How the system works
+## Documents
 
-1. **Data.** Daily prices are retrieved for the selected ETFs, validated, and stored as an immutable snapshot that records its source, terms of use, and version.
-2. **States.** Each asset's open-to-open return over a period of P sessions is assigned to a category (by default terciles of its training returns: low, middle, high). The categories of all assets together form a joint state, such as "SPY low, TLT high".
-3. **Markov model.** Transitions from each context to each next joint state are counted. The probabilities are the empirical frequencies, with no smoothing by default; contexts with too few transitions back off to shorter contexts, and every estimate is shown with its support.
-4. **Conditional return and risk.** The next-state probabilities and each state's representative holding return give a conditional expected return vector and covariance matrix.
-5. **Optimization.** The portfolio with the highest expected excess return per unit of risk is chosen: long-only by default, long-short as an option, with cash when no positive expectation exists.
-6. **Evaluation.** A walk-forward backtest with transaction costs compares the strategy with baselines (buy-and-hold, 1/N, the same optimizer without states, separate chains per asset, and a shuffled-day placebo) on a locked holdout segment, with block-bootstrap confidence intervals and pre-registered hypotheses.
+| Document | File |
+|---|---|
+| Software Requirements Specification (SRS) v3.1 | [`docs/StochTrade_SRS.pdf`](docs/StochTrade_SRS.pdf) · Word source [`docs/StochTrade_SRS.docx`](docs/StochTrade_SRS.docx) |
+| Guide for AI assistants and readers | [`docs/LLM_GUIDE.md`](docs/LLM_GUIDE.md) — paste it into an AI assistant to explain the project |
+| Software Design Document (SDD) | due 22 January 2027 |
 
-The full specification is in the SRS.
+## Screen prototype
+
+- **Open online:** https://sebaamasha.github.io/StochTrade/prototype/stochtrade_prototype.html
+- **Open offline:** download [`prototype/stochtrade_prototype.html`](prototype/stochtrade_prototype.html) and double-click it. It is a single file with no server; the chart library (Plotly.js 2.35.2) is embedded.
+- **All numbers in the prototype are synthetic.** They illustrate layout and behaviour only and must not be cited as results.
+
+Screens: Overview (SC-02), Strategy builder with feasibility heatmap and draggable category thresholds (SC-03), Data and runs with saved studies (SC-04), Model insights with the **interactive Markov chain** — click a state to see its distribution, weights, and an explanation — plus the transition heatmap, state timeline, and chain quality (SC-05), Optimization explorer with the efficient frontier (SC-06), Backtest lab with equity, drawdown, rolling Sharpe, and the hypotheses forest plot (SC-07), and Job status (SC-08). Every chart is interactive, and every time-axis chart is computed point-in-time (SRS FR-23 to FR-26); in the Markov chain view, drag one state onto another to merge them and compare the merged chain with the original.
 
 ## Repository structure
 
 | Folder | Contents |
 |---|---|
-| `docs/` | Project documents: the SRS, and later the SDD and the test and evaluation reports |
-| `prototype/` | `stochtrade_prototype.html`: interactive screen prototype |
+| `docs/` | Project documents: SRS now; SDD, validation report, and final report later |
+| `prototype/` | Interactive screen prototype (single HTML file) |
+| `backend/` | Planned: Python 3.12 and FastAPI — data pipeline, Markov model, optimization, backtester (from milestone M1) |
+| `frontend/` | Planned: React interface with Plotly.js charts (from milestone M2) |
+| `tests/` | Planned: automated tests, including the numeric acceptance criteria of SRS Chapter 3 |
 
-The application code will be added after the SDD (due 22 January 2027) in this planned layout:
+## Technology (SRS Section 2.7)
 
-| Folder (planned) | Contents |
-|---|---|
-| `backend/` | Python 3.12 and FastAPI: data, model, optimization, backtest engine, API |
-| `frontend/` | React web interface |
-| `tests/` | Unit and acceptance tests; the worked examples of the SRS are test fixtures |
+Python 3.12, FastAPI, FastAPI Users, PostgreSQL, RQ with Redis, NumPy, pandas, SciPy, CVXPY, React, Plotly.js, exchange_calendars, Docker Compose, and GitHub Actions.
 
-## Prototype
-
-**Live version:** https://sebaamasha.github.io/StochTrade/prototype/stochtrade_prototype.html
-
-The prototype is a single HTML file with plain JavaScript and no server. To run it locally, download `prototype/stochtrade_prototype.html` and open it in a browser (Chrome, Edge, or Firefox).
-
-| Screen | What it shows |
-|---|---|
-| SC-01 Sign in | Sign-in and registration forms |
-| SC-02 Overview | Current context, latest weights, comparison with baselines |
-| SC-03 Strategy builder | All experiment settings, feasibility preview, category-split preview, validation |
-| SC-04 Data and runs | Snapshot details and the list of runs |
-| SC-05 Model insights | Transition table, chain quality, forecast skill |
-| SC-06 Optimization explorer | Conditional estimates and the resulting portfolio, long-only or long-short |
-| SC-07 Backtest lab | Equity curves, metrics, hypotheses report, folds, holdout lock |
-| SC-08 Job status | Progress, cancellation, and failure reasons |
-
-The values in the Overview and Optimization Explorer reproduce the worked example of SRS Section 3.5 (weights SPY 51.60% and TLT 48.40%).
-
-**All other numbers in the prototype are synthetic.** They illustrate layout and behaviour only and must not be cited as results.
-
-## Working conventions
-
-- Each module has one owner and one reviewer (SRS Section 2.8).
-- Work is done on feature branches and merged into `main` through a pull request approved by the reviewer.
-- Every acceptance criterion with numbers in the SRS becomes an automated test.
-
-## Status and milestones
+## Milestones
 
 | Milestone | Date |
 |---|---|
-| SRS submitted for supervisor approval | November 2026 |
-| M1: data foundation | 25 December 2026 |
-| SDD | 22 January 2027 |
-| M2: model core | 19 February 2027 |
-| Alpha review (MVP) | 26 March 2027 |
-| Beta review | 4 June 2027 |
-| Final report | 31 August 2027 |
+| SRS signed | 27 Nov 2026 |
+| M1 — data foundation | 25 Dec 2026 |
+| SDD signed | 22 Jan 2027 |
+| M2 — model core | 19 Feb 2027 |
+| Alpha review (MVP) | 26 Mar 2027 |
+| Beta review | 4 Jun 2027 |
+| Validation report | 25 Jun 2027 |
+| Final project report | 31 Aug 2027 |
+
+## Working rules
+
+- Every change goes through a pull request reviewed by the module's reviewer (SRS Section 2.8).
+- Tests run on every push; every acceptance criterion with numbers becomes an automated test.
+- No secrets or API keys are committed; they are read from environment variables.
